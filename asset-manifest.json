@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/pokemoe-data/static/css/main.abd64e84.css",
+    "main.js": "/pokemoe-data/static/js/main.460a1e84.js",
+    "index.html": "/pokemoe-data/index.html",
+    "main.abd64e84.css.map": "/pokemoe-data/static/css/main.abd64e84.css.map",
+    "main.460a1e84.js.map": "/pokemoe-data/static/js/main.460a1e84.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.abd64e84.css",
+    "static/js/main.460a1e84.js"
+  ]
+}
