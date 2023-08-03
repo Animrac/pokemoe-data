@@ -17,5 +17,8 @@
     "mysql": "^2.18.1",
     "nodemon": "^3.0.1",
     "sql-formatter": "^12.2.3"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
