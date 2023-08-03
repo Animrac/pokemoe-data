@@ -5,6 +5,7 @@ function App() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPokemon, setSelectedPokemon] = useState(null); // State to store the selected Pokemon
 
   useEffect(() => {
     // Fetch data from the /pokes3 endpoint
@@ -38,39 +39,85 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <h1>Pokemon Data</h1>
-      <div>
-        <input
-          type="text"
-          placeholder="Search by name or national ID"
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          style={{ width: '400px', marginLeft: '20px' }}
-        />
-      </div>
-      {filteredData.length > 0 ? (
-        <div className="scroll-container">
-          <ul style={{ margin: 0, padding: 0 }}>
-            {filteredData.map(pokemon => (
-              <li key={pokemon.national_id} style={{ margin: '0', padding: '0', marginBottom: '0px' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <img
-                    src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
-                    alt={`${pokemon.name} Icon`}
-                    style={{ width: '32px', height: '32px', marginRight: '10px', marginLeft: '20px' }}
-                  />
-                  <h2>{pokemon.national_id + ': ' + pokemon.name}</h2>
-                </div>
-              </li>
-            ))}
-          </ul>
+      <div className="App" style={{ display: 'flex' }}>
+        {/* Left Container */}
+        <div style={{ width: '350px', textAlign: 'center' }}>
+          <h1>Pokemon Data</h1>
+          <div style={{ padding: '20px' }}>
+            <input
+              type="text"
+              placeholder="Search by name or national ID"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </div>
+          {filteredData.length > 0 ? (
+            <div className="scroll-container">
+              <ul style={{ margin: 0, padding: 0 }}>
+                {filteredData.map(pokemon => (
+                  <li key={pokemon.national_id} style={{ margin: '0', padding: '0', marginBottom: '0px' }}>
+                    <button
+                      onClick={e => setSelectedPokemon(pokemon)} // Add a click event handler
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        border: 'none',
+                        background: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                    >
+                      <img
+                        src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
+                        alt={`${pokemon.name} Icon`}
+                        style={{ width: '32px', height: '32px', marginRight: '10px', marginLeft: '20px' }}
+                      />
+                      <h2>{pokemon.national_id + ': ' + pokemon.name}</h2>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p>No matching Pokemon found.</p>
+          )}
         </div>
-      ) : (
-        <p>No matching Pokemon found.</p>
-      )}
-    </div>
+        
+      {/* Right Container */}
+      <div style={{ width: '100%', textAlign: 'center', padding: '20px', backgroundColor: '#f0f0f0' }}>
+        {/* Your content for the right container */}
+        {/* <h2>Right Container</h2>
+        
+        <p>This is the content for the right container.</p> */}
+        
+        {/* Display the name of the clicked Pokemon */}
+        {selectedPokemon ? (
+          <div>
+            <h2>Selected Pokemon</h2>
+            <img
+              src={`data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')}`}
+              alt={`${selectedPokemon.name} Sprite`}
+              style={{ width: '64px', height: '64px'}}
+            />
+            <p>{selectedPokemon.name}</p>
+          </div>
+        ) : (
+          <h2>No Pokemon selected</h2>
+        )}
+        </div>
+      </div>
   );
-}
+}  
+
+// const handleButtonClick = (pokemon) => {
+//   // Here, you can perform the desired action with the clicked Pokemon data
+//   // alert(`You clicked on ${pokemon.name}.`);
+  
+//   value={pokemon}
+//   setSelectedPokemon(pokemon.name);
+// };
+
+
 
 export default App;
