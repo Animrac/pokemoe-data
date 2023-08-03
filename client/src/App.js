@@ -13,13 +13,16 @@ function App() {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        console.log(response);
         return response.json(); // Parse the response body as JSON
       })
       .then(data => {
         console.log(data);
         setData(data.poke);
       })
-      .catch(error => setError(error.message));
+      .catch(error => {
+        console.log('js so fun');
+        setError(error.message);});
   }, []);
 
   if (error) {
