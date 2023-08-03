@@ -46,7 +46,7 @@ function App() {
           placeholder="Search by name or national ID"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          style={{ width: '400px' }}
+          style={{ width: '400px', marginLeft: '20px' }}
         />
       </div>
       {filteredData.length > 0 ? (
@@ -58,7 +58,7 @@ function App() {
                   <img
                     src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
                     alt={`${pokemon.name} Icon`}
-                    style={{ width: '32px', height: '32px', marginRight: '10px' }}
+                    style={{ width: '32px', height: '32px', marginRight: '10px', marginLeft: '20px' }}
                   />
                   <h2>{pokemon.national_id + ': ' + pokemon.name}</h2>
                 </div>
