@@ -25,7 +25,10 @@ const db = mysql.createPool({
     queueLimit: 0,
 });
 
-// Endpoint for retrieving Pokemon information
+/**
+ * Endpoint test for basic text results of stored pokemon data.
+ * Example URL: http://localhost:3001/pokes
+ */
 app.get("/pokes", (req, res) => {
     const testQuery = `
         SELECT *,
@@ -55,9 +58,15 @@ app.get("/pokes", (req, res) => {
     });
 });
 
-// Endpoint for retrieving Pokemon images and details
+/**
+ * Endpoint for retrieving all pokemon basic details.
+ * Example URL: http://localhost:3001/pokes3
+ */
 app.get("/pokes3", (req, res) => {
-    const theQuery = "SELECT * from pokemon_ref join pokemon_pics on pokemon_ref.national_id = pokemon_pics.national_id";
+    const theQuery = `
+        SELECT pr.name, pr.national_id, pp.icon_1
+        from pokemon_ref pr
+        join pokemon_pics pp on pr.national_id = pp.national_id`;
     db.query(theQuery, (err, result) => {
         if (err) {
             console.error("Error retrieving image:", err);
@@ -73,14 +82,17 @@ app.get("/pokes3", (req, res) => {
     });
 });
 
-// Endpoint for retrieving specific Pokemon sprite
+/**
+ * Allows for getting a specific pokemon's sprite.
+ * Example URL: http://localhost:3001/pokeSprite/255
+ */
 app.get("/pokeSprite/:national_id", (req, res) => {
     const theQuery = `
-    SELECT * 
-    FROM pokemon_ref 
-    JOIN pokemon_pics ON pokemon_ref.national_id = pokemon_pics.national_id 
-    WHERE pokemon_ref.national_id = ?
-`;
+        SELECT * 
+        FROM pokemon_ref 
+        JOIN pokemon_pics ON pokemon_ref.national_id = pokemon_pics.national_id 
+        WHERE pokemon_ref.national_id = ?
+    `;
 
     const values = [req.params.national_id];
     db.query(theQuery, values, (err, rows) => {
@@ -97,6 +109,63 @@ app.get("/pokeSprite/:national_id", (req, res) => {
         }
     });
 });
+
+/**
+ * Endpoint for retrieving party pokemon.
+ * Example URL: http://localhost:3001/party
+ */
+app.get("/party", (req, res) => {
+    const theQuery = `
+        SELECT pr.name, pr.national_id, pp.icon_1
+        from pokemon_party pa
+        join pokemon_ref pr on pa.national_id = pr.national_id
+        join pokemon_pics pp on pr.national_id = pp.national_id`;
+    db.query(theQuery, (err, result) => {
+        if (err) {
+            console.error("Error retrieving image:", err);
+            res.status(500).send("Error retrieving image");
+            return;
+        }
+        if (result.length === 0) {
+            res.status(404).send("Valid pokes not found");
+            return;
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ poke: result });
+    });
+});
+
+/**
+ * Endpoint for setting party pokemon.
+ * Example URL: http://localhost:3001/party
+ */
+app.post("/party", (req, res) => {
+    const slot = req.body.slot; // Assuming the slot value is provided in the request body
+    const ID = req.body.ID;     // Assuming the ID value is provided in the request body
+    
+    if (typeof slot !== 'number' || typeof ID !== 'number' || slot < 1 || slot > 6) {
+        res.status(400).send("Invalid slot or ID values");
+        return;
+    }
+    
+    const theQuery = `
+        INSERT INTO pokemon_party (slot, ID)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE ID = VALUES(ID);
+    `;
+    db.query(theQuery, [slot, ID], (err, result) => {
+        if (err) {
+            console.error("Error executing query:", err);
+            res.status(500).send("Error executing query");
+            return;
+        }
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ message: "Party pokemon updated successfully" });
+    });
+});
+
+// TODO: should get: evolves from, evolves into, checkboxes
 
 // Start the server
 app.listen(port, () => {
