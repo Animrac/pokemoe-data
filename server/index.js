@@ -1,12 +1,12 @@
 const express = require('express')
-const app = express()
+const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mysql = require('mysql')
 
 const sqlFormatter = require('sql-formatter');
 
-const port = 3000; // Replace this with your desired port number
+const port = 3001; // Replace this with your desired port number
 
 // Configure static file serving for the "public" folder
 app.use(express.static('public'));
@@ -15,11 +15,8 @@ app.use(express.static('public'));
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
-
-
-
 
 const db = mysql.createPool({
     host: 'us-cdbr-east-06.cleardb.net',
@@ -30,7 +27,7 @@ const db = mysql.createPool({
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const imgQ = "SELECT * from pokemon_pics";
 
@@ -50,48 +47,32 @@ app.get("/snore", (req, res) => {
             return;
         }
 
-
-
-
         result.forEach(row => {
             res.write(row.sprite);
         });
 
         res.end();
-
-
-
-        // // Retrieve the image data from the query result
-        // const imageBuffer = result[1].sprite;
-
-        // // Set the appropriate Content-Type for the image
-        // res.set("Content-Type", "image/png"); // Change the content type according to your image format
-
-        // // Send the image binary data as the response
-        // // res.write("snorlax ig:");
-        // res.write(imageBuffer);
-        // res.end();
     });
 });
 
 const testQuery = "SELECT *, " +
-                 "(SELECT pr.name FROM pokemon_ref pr WHERE pr.national_id = er.evolves_from) AS evolves_from_name " +
-                 "FROM pokemon_ref p " +
-                 "NATURAL JOIN pokemon_type "+ 
-                 "JOIN evolve_ref er ON p.national_id = er.national_id";
+    "(SELECT pr.name FROM pokemon_ref pr WHERE pr.national_id = er.evolves_from) AS evolves_from_name " +
+    "FROM pokemon_ref p " +
+    "NATURAL JOIN pokemon_type " +
+    "JOIN evolve_ref er ON p.national_id = er.national_id";
 
 // const formattedSql = sqlFormatter.format(testQuery); wth this just formats the query
-                
-app.get("/pokes", (req, res) => {        
+
+app.get("/pokes", (req, res) => {
     db.query(testQuery, (err, result) => {
         if (err) {
             throw err;
-          }
+        }
         result.forEach((pokemon) => {
             let pokemonInfo = `Name: ${pokemon.name}
-|ID: ${pokemon.national_id}
-|Primary Type: ${pokemon.primary_type}
-|Secondary Type: ${pokemon.secondary_type ? pokemon.secondary_type : 'None'}`;
+                |ID: ${pokemon.national_id}
+                |Primary Type: ${pokemon.primary_type}
+                |Secondary Type: ${pokemon.secondary_type ? pokemon.secondary_type : 'None'}`;
 
             // Check if 'evolves_from' is not null and add it to the template string
             if (pokemon.evolves_from !== null) {
@@ -106,6 +87,48 @@ app.get("/pokes", (req, res) => {
     })
 })
 
+app.get("/pokes2", (request, res) => {
+    const theQuery = "select * from pokemon_ref where national_id > 257";
+    let values = [257];
+  
+    db.query(theQuery, (err, result) => {
+        if (err) {
+            console.error("Error retrieving image:", err);
+            res.status(500).send("Error retrieving image");
+            return;
+        }
+
+        if (result.length === 0) {
+            res.status(404).send("valid pokes not found");
+            return;
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ poke: result });
+    });
+});
+
+app.get("/pokes3", (request, res) => {
+    const theQuery = "select * from pokemon_ref join pokemon_pics on pokemon_ref.national_id = pokemon_pics.national_id";
+    let values = [257];
+  
+    db.query(theQuery, (err, result) => {
+        if (err) {
+            console.error("Error retrieving image:", err);
+            res.status(500).send("Error retrieving image");
+            return;
+        }
+
+        if (result.length === 0) {
+            res.status(404).send("valid pokes not found");
+            return;
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ poke: result });
+    });
+});
+
 app.get("/", (req, res) => {
     res.send("type \/uwu in the URL pls");
 })
@@ -117,38 +140,3 @@ app.get("/uwu", (req, res) => {
 app.get("/owo", (req, res) => {
     res.send("stop");
 })
-
-
-app.listen(3001, () => {
-    console.log("running on port 3001 yaya idk what im doing")
-})
-
-
-
-// app.get("/pokes", (req, res) => {        
-//     db.query(testQuery, (err, result) => {
-//         if (err) {
-//             throw err;
-//           }
-//         // console.log(result);
-//         // const parsedData = JSON.parse(result);
-
-//         // result.forEach((pokemon) => {
-//         //     console.log(`Name: ${pokemon.name}`);
-//         //     console.log(`ID: ${pokemon.national_id}`);
-//         //     console.log("--------------------");
-//         //   });
-
-//         result.forEach((pokemon) => {
-//             const pokemonInfo = 
-//                 `Name: ${pokemon.name}
-//                 \nID: ${pokemon.national_id}
-//                 \nPrimary Type: ${pokemon.primary_type}
-//                 \nEvolves From: ${pokemon.evolves_from}
-//                 \n--------------------\n`;
-//             res.write(pokemonInfo);
-//         });
-//         res.end();
-
-//     })
-// })
