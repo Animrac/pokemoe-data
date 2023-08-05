@@ -93,7 +93,7 @@ function App() {
           <div style = {{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
           // <div>Loading</div>
         ) : filteredData.length > 0 ? (
-          <div className="scroll-container" style = {{ maxHeight: '250px' }} >
+          <div className="scroll-container" style = {{ maxHeight: '250px', minHeight: '250px' }} >
             <ul style={{ margin: 0, padding: 0 }}>
               {filteredData.map((pokemon, index) => (
                 <li
@@ -138,7 +138,7 @@ function App() {
             </ul>
           </div>
         ) : (
-          <p>No matching Pokémon found.</p>
+          <p style= {{ minHeight: '218px',  fontWeight: 'bold', color: 'red'}}>No matching Pokémon found.</p>
         )}
         
 
