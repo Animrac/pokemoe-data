@@ -6,11 +6,7 @@
   height: 40vmin;
   pointer-events: none;
 }
-.left-container {
-  max-height: 100%; /* Set your desired max width here */
-  margin: 0 auto; /* This will center the container horizontally if it's smaller than the screen */
-  overflow-y: hidden; 
-}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
