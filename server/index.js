@@ -111,6 +111,34 @@ app.get("/pokeSprite/:national_id", (req, res) => {
 });
 
 /**
+ * Allows for getting a specific pokemon's name.
+ * Example URL: http://localhost:3001/pokeName/255
+ */
+app.get("/pokeName/:national_id", (req, res) => {
+    const theQuery = `
+        SELECT * 
+        FROM pokemon_ref 
+        WHERE pokemon_ref.national_id = ?
+    `;
+
+    const values = [req.params.national_id];
+    db.query(theQuery, values, (err, rows) => {
+        if (err) {
+            console.error("Error retrieving sprite:", err);
+            res.status(500).send("Error retrieving sprite");
+            return;
+        }
+        if (rows.length !== 1) {
+            res.status(404).send("Valid pokes not found");
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json({ name: rows[0].name,
+            national_id : rows[0].national_id });
+        }
+    });
+});
+
+/**
  * Endpoint for retrieving party pokemon.
  * Example URL: http://localhost:3001/party
  */
