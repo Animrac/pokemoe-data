@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ReactLoading from "react-loading";
 import { Buffer } from 'buffer';
 import logo from './moe.png';
+import bg from './/stripesbg.jpg';
 import PreLoader1 from "./components/PreLoader1";
 
 
@@ -75,7 +76,7 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ display: 'flex', height: '100vh' }}>
+    <div className="App" style={{ display: 'flex'}}>
 
       {/* Left Container */}
       <div className="left-container" style={{ width: '470px', textAlign: 'center', backgroundColor: '#EEEEEE' }}>
@@ -210,7 +211,7 @@ function App() {
           width: '100%',
           textAlign: 'left',
           padding: '20px',
-          backgroundColor: 'white',
+          backgroundImage: `url(${require("./stripesbg.jpg")})`
           // backgroundColor: '#f8fcf3',
         }}>
             {/* Sprite Image */}
@@ -271,7 +272,7 @@ function App() {
                     {/* Location Container */}
                     <div  style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
                       <h2 style = {{margin: '0px'}}>Location Description</h2>
-                      You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. Should I eat ice cream?
+                      You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream?
                     </div>
 
                     {/* Ability List Container */}
@@ -285,12 +286,14 @@ function App() {
                       <h2 style = {{margin: '0px'}}>Evolves to:</h2>
                       a better pokemon
 
-                      <p style = {{fontWeight: 'bold'}}>(these are placeholders. i hope you knew that.) </p>
-                      currently:<br />
-                      - i tried making the sections as neat as possible. this way we can just add the code into each section once we get the endpoints working<br />
-                      - checkboxes do NOTHING. we also need a way to filter by caught/uncaught pokemon<br />
-                      - i want to add arrows to easily go between each pokemon by index<br />
-                      - the container on the right is there until i understand how to call the pokemon's type. then we can do the cool backgrounds<br />
+                      <p style = {{fontWeight: 'bold', padding: '0', margin: '0', marginTop: '20px'}}>currently: </p><br />
+                      - neat sections mean we can just add the code into each section/resize once we get the endpoints working<br />
+                      - colors and new sections can be added if we need<br />
+                      - checkboxes do NOTHING atm. we also need a way to filter by caught/uncaught pokemon<br />
+                      - maybe we could add arrows to easily go between each pokemon by index<br />
+                      - until i understand how to call the pokemon's type, then we can do the cool backgrounds. for now i was able to put a stripey one and an elongated sprite on the right<br />
+                      - i couldn't figure out how to remove the little bit of white space at the bottom<br />
+                      - i know how to do html all by hand now XD <br />
                     </div>
               </div>
             ) : null}        
