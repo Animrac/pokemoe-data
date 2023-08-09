@@ -130,6 +130,16 @@ function App() {
       setSpeedBarWidth((selectedPokemon.Speed / maxSpeedValue) * 100);    
   };
 
+  const arrowButtonStyle = {
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    border: 'none', // Remove the border
+    marginBottom: '20px',
+    width: '100px',
+    borderRadius: '10px',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M52 32L22 12V22H12V42H22V52L52 32Z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
+  };
 
   const partyButtonStyle = {
     backgroundColor: 'white',
@@ -144,6 +154,7 @@ function App() {
     border: '5px solid #ffffff',
   };
 
+// when selecting a pokemon to view from the list
 const handleButtonClick = async (nationalId) => {
   const audio = new Audio(selectSound);
   audio.play();
@@ -262,8 +273,8 @@ const maxSpeedValue = 180;
           <div style={{ padding: '0', margin: '0' }}>
             <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px'}}>PokéMoe Data</h1>
             {/* insert a description */}
-            Gotta woo 'em all~! &lt;3<br /> 
-            nvm idk what to put here
+            Gotta woo 'em all &lt;3<br /> 
+            nvm
           </div>
         </div>
 
@@ -531,6 +542,17 @@ const maxSpeedValue = 180;
                       <div style ={{ flex: 1, textAlign: 'right', alignItems: 'right' }}>
                         Evolves from or maybe arrow buttons go here
                       </div>
+
+                      {/* <div style ={{ flex: 1, display: 'flex', flexDirection: 'row', textAlign: 'right', alignItems: 'right' }}>
+                      Evolves from or maybe arrow buttons go here
+                        {/* <div style= {{width: '100%'}}></div>
+                        <button style={{ ...arrowButtonStyle, transform: 'scaleX(-1)' }}>
+                          {/* Content arrow button */}
+                        {/* </button>
+                        <button style={{ ...arrowButtonStyle }}>
+                          {/* Content arrow button */}
+                        {/* </button> */}
+                      {/* </div> */}
 
                     </div>
 
