@@ -205,10 +205,9 @@ app.get("/pokeData/:national_id", (req, res) => {
  */
 app.get("/party", (req, res) => {
     const theQuery = `
-        SELECT pr.name, pr.national_id, pp.icon_1
+        select pa.slot, pp.sprite
         from pokemon_party pa
-        join pokemon_ref pr on pa.national_id = pr.national_id
-        join pokemon_pics pp on pr.national_id = pp.national_id`;
+        join pokemon_pics pp on pa.id = pp.national_id`;
     db.query(theQuery, (err, result) => {
         if (err) {
             console.error("Error retrieving image:", err);
@@ -237,11 +236,18 @@ app.post("/party", (req, res) => {
         return;
     }
     
-    const theQuery = `
+    var theQuery = `
         INSERT INTO pokemon_party (slot, ID)
         VALUES (?, ?)
         ON DUPLICATE KEY UPDATE ID = VALUES(ID);
     `;
+
+    if (ID === -1) {
+        theQuery = `
+        DELETE FROM pokemon_party WHERE slot = ?;
+    `;
+    }
+
     db.query(theQuery, [slot, ID], (err, result) => {
         if (err) {
             console.error("Error executing query:", err);
@@ -250,7 +256,7 @@ app.post("/party", (req, res) => {
         }
         
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json({ message: "Party pokemon updated successfully" });
+        res.status(200).json({ message: "success" });
     });
 });
 

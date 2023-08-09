@@ -88,6 +88,8 @@ const typeToAccentMap = {
   // Add more types and their corresponding image URLs here
 };
 
+const partySprite = {};
+const plusSign = `url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")`;
 
 function App() {
   const [data, setData] = useState([]);
@@ -112,7 +114,6 @@ function App() {
 
   //this was when you start the page, the PC starting sound would activate. doesn't really work though
   // const audioRef = useRef(null);
-
   // const playEntrySound = () => {
   //   if (audioRef.current) {
   //     audioRef.current.play();
@@ -122,12 +123,12 @@ function App() {
   const spriteDimensions = 250;
 
   const calculateStats = (selectedPokemon) => {
-      setAtkBarWidth((selectedPokemon.Attack / maxATKValue) * 100);
-      setDefBarWidth((selectedPokemon.Defense / maxDEFValue) * 100);
-      setSpAtkBarWidth((selectedPokemon.Special_Attack / maxSpAtkValue) * 100);
-      setSpDefBarWidth((selectedPokemon.Special_Defense / maxSpDefValue) * 100);
-      setHpBarWidth((selectedPokemon.HP / maxHPValue) * 100);
-      setSpeedBarWidth((selectedPokemon.Speed / maxSpeedValue) * 100);    
+    setAtkBarWidth((selectedPokemon.Attack / maxATKValue) * 100);
+    setDefBarWidth((selectedPokemon.Defense / maxDEFValue) * 100);
+    setSpAtkBarWidth((selectedPokemon.Special_Attack / maxSpAtkValue) * 100);
+    setSpDefBarWidth((selectedPokemon.Special_Defense / maxSpDefValue) * 100);
+    setHpBarWidth((selectedPokemon.HP / maxHPValue) * 100);
+    setSpeedBarWidth((selectedPokemon.Speed / maxSpeedValue) * 100);
   };
 
   const arrowButtonStyle = {
@@ -154,28 +155,51 @@ function App() {
     border: '5px solid #ffffff',
   };
 
-// when selecting a pokemon to view from the list
-const handleButtonClick = async (nationalId) => {
-  const audio = new Audio(selectSound);
-  audio.play();
-  const fetchedPokemon = await fetchData(nationalId);
-  calculateStats(fetchedPokemon);
-};
+  // when selecting a pokemon to view from the list
+  const handleButtonClick = async (nationalId) => {
+    const audio = new Audio(selectSound);
+    audio.play();
+    const fetchedPokemon = await fetchData(nationalId);
+    calculateStats(fetchedPokemon);
+  };
 
+
+  // Define maximum values for each stat (adjust these according to your data)
+  const maxATKValue = 190;
+  const maxDEFValue = 230;
+  const maxSpAtkValue = 190;
+  const maxSpDefValue = 230;
+  const maxHPValue = 255;
+  const maxSpeedValue = 180;
+
+
+  async function partyData(slot, nationalId) {
+    const responseData = {};
+    try {
+        const response = await fetch('/party', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                slot: slot,
+                ID: nationalId
+            })
+        });
   
-// Define maximum values for each stat (adjust these according to your data)
-const maxATKValue = 190;
-const maxDEFValue = 230;
-const maxSpAtkValue = 190;
-const maxSpDefValue = 230;
-const maxHPValue = 255;
-const maxSpeedValue = 180;
-
-
-
+        if (!response.ok) {
+            return false;
+        }
+  
+        responseData = await response.json();
+    } catch (error) {
+      return false;
+    }
+    return responseData.includes('message') ? true : false;
+  }
 
   useEffect(() => {
-    
+
     // playEntrySound();
 
     // Fetch data from the /pokes3 endpoint
@@ -229,14 +253,15 @@ const maxSpeedValue = 180;
         Special_Attack: data.Special_Attack,
         Special_Defense: data.Special_Defense,
         primary_type: data.primary_type,
-        secondary_type: data.secondary_type};
+        secondary_type: data.secondary_type
+      };
       setSelectedPokemon(newSelectedPokemon);
       return newSelectedPokemon; // Return the fetched Pokemon data
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-  
+
 
 
   const filteredData = data.filter(pokemon => {
@@ -260,7 +285,7 @@ const maxSpeedValue = 180;
 
   return (
     // <div className="App" onClick={playEntrySound} style={{ display: 'flex'}}>
-    <div className="App" style={{ display: 'flex'}}>
+    <div className="App" style={{ display: 'flex' }}>
 
       {/* Left Container */}
       <div className="left-container" style={{ width: '470px', textAlign: 'center', backgroundColor: '#EEEEEE' }}>
@@ -271,9 +296,9 @@ const maxSpeedValue = 180;
             <img src={logo} alt={`Logo`} style={{ width: '120px' }} />
           </div>
           <div style={{ padding: '0', margin: '0' }}>
-            <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px'}}>PokéMoe Data</h1>
+            <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px' }}>PokéMoe Data</h1>
             {/* insert a description */}
-            Gotta woo 'em all &lt;3<br /> 
+            Gotta woo 'em all &lt;3<br />
             nvm
           </div>
         </div>
@@ -289,71 +314,71 @@ const maxSpeedValue = 180;
               width: '100%',
               height: '40px',
               fontSize: '16px',
-              fontWeight: 'bold', 
+              fontWeight: 'bold',
               borderRadius: '10px'
             }}
           />
         </div>
 
         {!done ? (
-          <div style = {{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
           // <div>Loading</div>
         ) : filteredData.length > 0 ? (
-          <div style = {{padding: '20px'}}>
-    <div className="scroll-container" style={{ maxHeight: '250px', minHeight: '250px', borderRadius: '10px' }}>
-      <ul style={{ margin: 0, padding: 0 }}>
-        {filteredData.map((pokemon, index) => (
-          <li
-            key={pokemon.national_id}
-            style={{
-              margin: '0',
-              padding: '0',
-              marginBottom: '0px',
-              backgroundColor: index % 2 === 0 ? '#e3e3e3' : '#ffffff',
-              width: '100%',
-            }}
-          >
-            <label style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <input
-                type="checkbox"
-                checked={checkedPokemons[pokemon.national_id]}
-                onChange={() => handleCheckboxChange(pokemon.national_id)}
-                style={{ marginRight: '10px', marginLeft: '20px' }}
-              />
-               <button 
-                key={pokemon.national_id} 
-                onClick={() => handleButtonClick(pokemon.national_id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  border: 'none',
-                  background: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  width: '100%',
-                }}
-              >
-                <img
-                  src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
-                  alt={`${pokemon.name} Icon`}
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    marginRight: '10px',
-                  }}
-                />
-                <h2>{pokemon.national_id + ': ' + pokemon.name}</h2>
-              </button>
-            </label>
-          </li>
-        ))}
-      </ul>
-    </div>
+          <div style={{ padding: '20px' }}>
+            <div className="scroll-container" style={{ maxHeight: '250px', minHeight: '250px', borderRadius: '10px' }}>
+              <ul style={{ margin: 0, padding: 0 }}>
+                {filteredData.map((pokemon, index) => (
+                  <li
+                    key={pokemon.national_id}
+                    style={{
+                      margin: '0',
+                      padding: '0',
+                      marginBottom: '0px',
+                      backgroundColor: index % 2 === 0 ? '#e3e3e3' : '#ffffff',
+                      width: '100%',
+                    }}
+                  >
+                    <label style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                      <input
+                        type="checkbox"
+                        checked={checkedPokemons[pokemon.national_id]}
+                        onChange={() => handleCheckboxChange(pokemon.national_id)}
+                        style={{ marginRight: '10px', marginLeft: '20px' }}
+                      />
+                      <button
+                        key={pokemon.national_id}
+                        onClick={() => handleButtonClick(pokemon.national_id)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          padding: 0,
+                          width: '100%',
+                        }}
+                      >
+                        <img
+                          src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
+                          alt={`${pokemon.name} Icon`}
+                          style={{
+                            width: '32px',
+                            height: '32px',
+                            marginRight: '10px',
+                          }}
+                        />
+                        <h2>{pokemon.national_id + ': ' + pokemon.name}</h2>
+                      </button>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         ) : (
-          <p style= {{ minHeight: '218px',  fontWeight: 'bold', color: 'red'}}>No matching Pokémon found.</p>
+          <p style={{ minHeight: '218px', fontWeight: 'bold', color: 'red' }}>No matching Pokémon found.</p>
         )}
-        
+
 
         {/* Grid */}
         <div
@@ -367,59 +392,125 @@ const maxSpeedValue = 180;
             // margin: '20px 0',
           }}
         >
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked1
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked1(!clicked1)}>
-          {/* Content for the first cell of the grid */}
-        </button>
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked2
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked2(!clicked2)}>
-          {/* Content for the second cell of the grid */}
-        </button>
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked3
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked3(!clicked3)}>
-          {/* Content for the third cell of the grid */}
-        </button>
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked4
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked4(!clicked4)}>
-          {/* Content for the fourth cell of the grid */}
-        </button>
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked5
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked5(!clicked5)}>
-          {/* Content for the fifth cell of the grid */}
-        </button>
-        <button style={{ ...partyButtonStyle,
-                  backgroundImage: clicked6
-                  // TODO replace this code by accessing from the party instead of the selected poke
-                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
-                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
-                  }} onClick={() => setClicked6(!clicked6)}>
-          {/* Content for the sixth cell of the grid */}
-        </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked1)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.first).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked1) {
+                partySprite.first = partyData(1,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.first = partyData(1,-1) ? plusSign : plusSign;
+              }
+              setClicked1(!clicked1);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the first cell of the grid */}
+          </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked2)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.second).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked2) {
+                partySprite.second = partyData(2,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.second = partyData(2,-1) ? plusSign : plusSign;
+              }
+              setClicked2(!clicked2);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the second cell of the grid */}
+          </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked3)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.third).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked3) {
+                partySprite.third = partyData(3,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.third = partyData(3,-1) ? plusSign : plusSign;
+              }
+              setClicked3(!clicked3);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the third cell of the grid */}
+          </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked4)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.fourth).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked4) {
+                partySprite.fourth = partyData(4,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.fourth = partyData(4,-1) ? plusSign : plusSign;
+              }
+              setClicked4(!clicked4);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the fourth cell of the grid */}
+          </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked5)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.fifth).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked5) {
+                partySprite.fifth = partyData(5,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.fifth = partyData(5,-1) ? plusSign : plusSign;
+              }
+              setClicked5(!clicked5);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the fifth cell of the grid */}
+          </button>
+          <button style={{
+            ...partyButtonStyle,
+            backgroundImage: (clicked6)
+              ? `url(data:image/png;base64,${Buffer.from(partySprite.sixth).toString('base64')})`
+              : plusSign,
+          }} onClick={() => {
+            if (selectedPokemon != null) {
+              if (!clicked6) {
+                partySprite.sixth = partyData(6,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
+              } else {
+                partySprite.sixth = partyData(6,-1) ? plusSign : plusSign;
+              }
+              setClicked6(!clicked6);
+            } else {
+              alert('No pokemon selected!');
+            }
+          }}>
+            {/* Content for the sixth cell of the grid */}
+          </button>
         </div>
-        
-        <h3 style = {{  marginTop: '0px', marginBottom: '0px'}}>Party</h3>
+
+        <h3 style={{ marginTop: '0px', marginBottom: '0px' }}>Party</h3>
       </div>
-  
+
       {/* Middle Container */}
       <div
         style={{
@@ -430,75 +521,75 @@ const maxSpeedValue = 180;
           backgroundImage: `url(${require("./stripesbg.jpg")})`
           // backgroundColor: '#f8fcf3',
         }}>
-            {/* Sprite Image */}
-            {selectedPokemon ? (
-              <div style={{ padding: '30px', display: 'flex', flexDirection: 'column' }}>
-                <img
-                  src={`data:image/png;base64,${Buffer.from(
-                    selectedPokemon.sprite.data
-                  ).toString('base64')}`}
-                  alt={`${selectedPokemon.name} Sprite`}
-                  style={{ width: spriteDimensions, marginBottom: '15px' }}
-                />
-                
-                {/* Base Stat Container */}
+        {/* Sprite Image */}
+        {selectedPokemon ? (
+          <div style={{ padding: '30px', display: 'flex', flexDirection: 'column' }}>
+            <img
+              src={`data:image/png;base64,${Buffer.from(
+                selectedPokemon.sprite.data
+              ).toString('base64')}`}
+              alt={`${selectedPokemon.name} Sprite`}
+              style={{ width: spriteDimensions, marginBottom: '15px' }}
+            />
 
-                <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
-                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                        <h2 style={{ margin: '0' }}> ATK </h2>
-                        <h2 style={{ margin: '0' }}> DEF </h2>
-                        <h2 style={{ margin: '0' }}> SP. ATK </h2>
-                        <h2 style={{ margin: '0' }}> SP. DEF </h2>
-                        <h2 style={{ margin: '0' }}> HP </h2>
-                        <h2 style={{ margin: '0' }}> SPD </h2>
-                      </div>
-                      
-                      <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column'}}>
-                        <div style={{ width: `${atkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
-                        <div style={{ width: `${defBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
-                        <div style={{ width: `${spAtkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
-                        <div style={{ width: `${spDefBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
-                        <div style={{ width: `${hpBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightSalmonCoral' }}></div>
-                        <div style={{ width: `${speedBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
-                      </div>
+            {/* Base Stat Container */}
 
-                      <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Attack}</div>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Defense}</div>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Attack}</div>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Defense}</div>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.HP}</div>
-                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Speed}</div>
-                        </div>
-                </div>
+            <div style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+              <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <h2 style={{ margin: '0' }}> ATK </h2>
+                <h2 style={{ margin: '0' }}> DEF </h2>
+                <h2 style={{ margin: '0' }}> SP. ATK </h2>
+                <h2 style={{ margin: '0' }}> SP. DEF </h2>
+                <h2 style={{ margin: '0' }}> HP </h2>
+                <h2 style={{ margin: '0' }}> SPD </h2>
+              </div>
 
-                {/* Other Info Container */}
+              <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: `${atkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
+                <div style={{ width: `${defBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
+                <div style={{ width: `${spAtkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
+                <div style={{ width: `${spDefBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
+                <div style={{ width: `${hpBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightCoral' }}></div>
+                <div style={{ width: `${speedBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
+              </div>
 
-                  <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
-                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
-                      
-                      <h3 style={{ margin: '0', padding: '0' }}>height</h3>
-                      <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
+              <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Attack}</div>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Defense}</div>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Attack}</div>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Defense}</div>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.HP}</div>
+                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Speed}</div>
+              </div>
+            </div>
 
-                      {/* <div><h3 style={{margin: '0', padding: '0'}}>male</h3> {selectedPokemon.male_gender_ratio} %</div> */}
+            {/* Other Info Container */}
 
-                      <h3 style={{margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
+            <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+              <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
-                    </div>
-                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
-                      
-                      <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
-                      <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
+                <h3 style={{ margin: '0', padding: '0' }}>height</h3>
+                <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
 
-                      {/* <div><h3 style={{margin: '0', padding: '0'}}>female</h3> {(100.00-selectedPokemon.male_gender_ratio).toFixed(2)} %</div> */}
+                {/* <div><h3 style={{margin: '0', padding: '0'}}>male</h3> {selectedPokemon.male_gender_ratio} %</div> */}
 
-                      <h3 style={{margin: '0', padding: '0', marginTop: '5px' }}>level rate</h3> {selectedPokemon.level_rate}
+                <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
 
-                    </div>
-                  </div>
+              </div>
+              <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
+
+                <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
+                <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
+
+                {/* <div><h3 style={{margin: '0', padding: '0'}}>female</h3> {(100.00-selectedPokemon.male_gender_ratio).toFixed(2)} %</div> */}
+
+                <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>level rate</h3> {selectedPokemon.level_rate}
+
+              </div>
+            </div>
 
 
-                {/* <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            {/* <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
                   <div><h3 style={{margin: '0', padding: '0' }}>height</h3> {selectedPokemon.height} m</div>
                   <div><h3 style={{margin: '0', padding: '0' }}>weight</h3> {selectedPokemon.weight} kg</div>
                   <div><h3 style={{margin: '0', padding: '0' }}>male rate</h3> {selectedPokemon.male_gender_ratio} %</div>
@@ -506,90 +597,90 @@ const maxSpeedValue = 180;
                   <div><h3 style={{margin: '0', padding: '0' }}>level rate</h3> {selectedPokemon.level_rate}</div>
                 </div> */}
 
+          </div>
+        ) : null}
+
+        {/* Name Container */}
+        {selectedPokemon ? (
+          <div style={{ display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', backgroundColor: '#dedede' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
+              {/* <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px', backgroundColor: 'white' }}> */}
+              <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
+                <h1 style={{ margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
+                <h2 style={{ margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
+
+                {/* Type Container */}
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  {/* <h3 style = {{marginRight: '20px'}}>{selectedPokemon.primary_type}</h3> */}
+                  <img
+                    style={{ marginRight: '5px', width: '100px' }}
+                    src={typeToImageMap[selectedPokemon.primary_type]}
+                    alt={selectedPokemon.primary_type}
+                  />
+
+                  {selectedPokemon.secondary_type !== null ? (
+                    <img
+                      style={{ width: '100px' }}
+                      src={typeToImageMap[selectedPokemon.secondary_type]}
+                      alt={selectedPokemon.secondary_type}
+                    />
+                  ) : (
+                    <p></p>
+                  )}
+                </div>
               </div>
-            ) : null}        
 
-            {/* Name Container */}
-            {selectedPokemon ? (
-              <div style={{ display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', backgroundColor: '#dedede' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
-                      {/* <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px', backgroundColor: 'white' }}> */}
-                      <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
-                        <h1 style={{margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
-                        <h2 style={{margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
+              <div style={{ flex: 1, textAlign: 'right', alignItems: 'right' }}>
+                Evolves from or maybe arrow buttons go here
+              </div>
 
-                        {/* Type Container */}
-                        <div style={{ display: 'flex', flexDirection: 'row'}}>
-                          {/* <h3 style = {{marginRight: '20px'}}>{selectedPokemon.primary_type}</h3> */}
-                          <img 
-                            style = {{marginRight: '5px', width: '100px'}} 
-                            src={typeToImageMap[selectedPokemon.primary_type]} 
-                            alt={selectedPokemon.primary_type} 
-                          />
-
-                          {selectedPokemon.secondary_type !== null ? (
-                            <img
-                              style={{ width: '100px' }}
-                              src={typeToImageMap[selectedPokemon.secondary_type]}
-                              alt={selectedPokemon.secondary_type}
-                            />
-                          ) : (
-                            <p></p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div style ={{ flex: 1, textAlign: 'right', alignItems: 'right' }}>
-                        Evolves from or maybe arrow buttons go here
-                      </div>
-
-                      {/* <div style ={{ flex: 1, display: 'flex', flexDirection: 'row', textAlign: 'right', alignItems: 'right' }}>
+              {/* <div style ={{ flex: 1, display: 'flex', flexDirection: 'row', textAlign: 'right', alignItems: 'right' }}>
                       Evolves from or maybe arrow buttons go here
                         {/* <div style= {{width: '100%'}}></div>
                         <button style={{ ...arrowButtonStyle, transform: 'scaleX(-1)' }}>
                           {/* Content arrow button */}
-                        {/* </button>
+              {/* </button>
                         <button style={{ ...arrowButtonStyle }}>
                           {/* Content arrow button */}
-                        {/* </button> */}
-                      {/* </div> */}
+              {/* </button> */}
+              {/* </div> */}
 
-                    </div>
+            </div>
 
-                    {/* Location Container */}
-                    <div  style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
-                      <h2 style = {{margin: '0px'}}>Location Description</h2>
-                      {selectedPokemon.location}<br />
-                      You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream?
-                    </div>
+            {/* Location Container */}
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+              <h2 style={{ margin: '0px' }}>Location Description</h2>
+              {selectedPokemon.location}<br />
+              You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream?
+            </div>
 
-                    {/* Ability List Container */}
-                    <div  style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
-                      <h2 style = {{margin: '0px'}}>Ability List</h2>
-                      insert list of poke abilities, idk how
-                    </div>
-                    
-                    {/* Evolves To Container */}
-                    <div  style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
-                      <h2 style = {{margin: '0px'}}>Evolves to:</h2>
-                      a better pokemon
+            {/* Ability List Container */}
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+              <h2 style={{ margin: '0px' }}>Ability List</h2>
+              insert list of poke abilities, idk how
+            </div>
 
-                      <p style = {{fontWeight: 'bold', padding: '0', margin: '0', marginTop: '20px'}}>currently: </p><br />
-                      - neat sections mean we can just add the code into each section once we get the endpoints<br />
-                      - this space looks REALLY empty without my notes. new sections can be added if we need<br />
-                      - checkboxes do nothing atm. we also need a way to filter by caught/uncaught pokemon<br />
-                      - party boxes<br />
-                      - WHY ISN'T HP WORKING<br />
-                      - i don't like how you can scroll the page<br />
-                      - maybe we could add arrows to easily go between each pokemon by index<br />
-                      - i know how to do html all by hand now <br />
-                    </div>
-              </div>
-            ) : null}        
-          </div>     
+            {/* Evolves To Container */}
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+              <h2 style={{ margin: '0px' }}>Evolves to:</h2>
+              a better pokemon
+
+              <p style={{ fontWeight: 'bold', padding: '0', margin: '0', marginTop: '20px' }}>currently: </p><br />
+              - neat sections mean we can just add the code into each section once we get the endpoints<br />
+              - this space looks REALLY empty without my notes. new sections can be added if we need<br />
+              - checkboxes do nothing atm. we also need a way to filter by caught/uncaught pokemon<br />
+              - party boxes<br />
+              - WHY ISN'T HP WORKING<br />
+              - i don't like how you can scroll the page<br />
+              - maybe we could add arrows to easily go between each pokemon by index<br />
+              - i know how to do html all by hand now <br />
+            </div>
+          </div>
+        ) : null}
+      </div>
 
       {/* Right Container */}
-      <div style={{ display: 'flex', width: '100px'}}>
+      <div style={{ display: 'flex', width: '100px' }}>
         {/* This part contains the content */}
         {selectedPokemon ? (
           <div>
@@ -599,12 +690,12 @@ const maxSpeedValue = 180;
               style={{ maxWidth: '100%', height: '100%', filter: 'opacity(50%)' }}
             />
           </div>
-        ) : null}  
-      </div>            
+        ) : null}
+      </div>
       {/* <audio ref={audioRef} src={entrySound} /> */}
     </div>
   );
-  
+
 }
 
 export default App;
