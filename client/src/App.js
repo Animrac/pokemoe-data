@@ -1,11 +1,49 @@
 // export default App;
 
 import React, { useState, useEffect } from 'react';
-import ReactLoading from "react-loading";
 import { Buffer } from 'buffer';
 import logo from './moe.png';
-import bg from './/stripesbg.jpg';
 import PreLoader1 from "./components/PreLoader1";
+
+import normal from './type_NORMAL.png';
+import fire from './type_FIRE.png';
+import water from './type_WATER.png';
+import grass from './type_GRASS.png';
+import electric from './type_ELECTRIC.png';
+import ice from './type_ICE.png';
+import fighting from './type_FIGHTING.png';
+import poison from './type_POISON.png';
+import ground from './type_GROUND.png';
+import flying from './type_FLYING.png';
+import psychic from './type_PSYCHIC.png';
+import bug from './type_BUG.png';
+import rock from './type_ROCK.png';
+import ghost from './type_GHOST.png';
+import dark from './type_DARK.png';
+import steel from './type_STEEL.png';
+import fairy from './type_FAIRY.png';
+
+const typeToImageMap = {
+  Normal: normal,
+  Fire: fire,
+  Water: water,
+  Grass: grass,
+  Electric: electric,
+  Ice: ice,
+  Fighting: fighting,
+  Poison: poison,
+  Ground: ground,
+  Flying: flying,
+  Psychic: psychic,
+  Bug: bug,
+  Rock: rock,
+  Ghost: ghost,
+  Dark: dark,
+  Steel: steel,
+  Fairy: fairy
+  // Add more types and their corresponding image URLs here
+};
+
 
 
 function App() {
@@ -17,7 +55,65 @@ function App() {
   const [checkedPokemons, setCheckedPokemons] = useState({});
   const spriteDimensions = 250;
 
+  // const typeToImageMap = {
+  //   Normal: `url(${require("./type_NORMAL.png")})`,
+  //   Fire: `url(${require("./type_FIRE.png")})`,
+  //   Water: `url(${require("./type_WATER.png")})`,
+  //   Grass: `url(${require("./type_GRASS.png")})`,
+  //   Electric: `url(${require("./type_ELECTRIC.png")})`,
+  //   Ice: `url(${require("./type_ICE.png")})`,
+  //   Fighting: `url(${require("./type_FIGHTING.png")})`,
+  //   Poison: `url(${require("./type_POISON.png")})`,
+  //   Ground: `url(${require("./type_GROUND.png")})`,
+  //   Flying: `url(${require("./type_FLYING.png")})`,
+  //   Psychic: `url(${require("./type_PSYCHIC.png")})`,
+  //   Bug: `url(${require("./type_BUG.png")})`,
+  //   Rock: `url(${require("./type_ROCK.png")})`,
+  //   Ghost: `url(${require("./type_GHOST.png")})`,
+  //   Dark: `url(${require("./type_DARK.png")})`,
+  //   Steel: `url(${require("./type_STEEL.png")})`,
+  //   Fairy: `url(${require("./type_FAIRY.png")})`,
+  //   // Add more types and their corresponding image URLs here
+  // };
   
+  // const typeToImageMap = {
+  //   normal: `url(${require("type_NORMAL.png")})`,
+  //   fire: `url(${require("type_FIRE.png")})`,
+  //   water: `url(${require("type_WATER.png")})`,
+  //   grass: `url(${require("type_GRASS.png")})`,
+  //   electric: `url(${require("type_ELECTRIC.png")})`,
+  //   ice: `url(${require("type_ICE.png")})`,
+  //   fighting: `url(${require("type_FIGHTING.png")})`,
+  //   poison: `url(${require("type_POISON.png")})`,
+  //   ground: `url(${require("type_GROUND.png")})`,
+  //   flying: `url(${require("type_FLYING.png")})`,
+  //   psychic: `url(${require("type_PSYCHIC.png")})`,
+  //   bug: `url(${require("type_BUG.png")})`,
+  //   rock: `url(${require("type_ROCK.png")})`,
+  //   ghost: `url(${require("type_GHOST.png")})`,
+  //   dark: `url(${require("type_DARK.png")})`,
+  //   steel: `url(${require("type_STEEL.png")})`,
+  //   fairy: `url(${require("type_FAIRY.png")})`,
+  //   // Add more types and their corresponding image URLs here
+  // };
+  
+  
+  
+// Define maximum values for each stat (adjust these according to your data)
+const maxATKValue = 190;
+const maxDEFValue = 230;
+const maxSpAtkValue = 190;
+const maxSpDefValue = 230;
+const maxHPValue = 255;
+const maxSpeedValue = 180;
+
+// Calculate bar widths for each stat
+const atkBarWidth = (selectedPokemon.Attack / maxATKValue) * 100;
+const defBarWidth = (selectedPokemon.Defense / maxDEFValue) * 100;
+const spAtkBarWidth = (selectedPokemon.Special_Attack / maxSpAtkValue) * 100;
+const spDefBarWidth = (selectedPokemon.Special_Defense / maxSpDefValue) * 100;
+const hpBarWidth = (selectedPokemon.HP / maxHPValue) * 100;
+const speedBarWidth = (selectedPokemon.Speed / maxSpeedValue) * 100;
 
   useEffect(() => {
     // Fetch data from the /pokes3 endpoint
@@ -43,16 +139,53 @@ function App() {
 
     
 
-  const fetchSprite = async (nationalId) => {
+  // const fetchSprite = async (nationalId) => {
+  //   try {
+  //     const response = await fetch(`/pokeSprite/${nationalId}`);
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     const data = await response.json();
+  //     setSelectedPokemon({ ...selectedPokemon, sprite: data.sprite });
+  //   } catch (error) {
+  //     console.error('Error fetching sprite:', error);
+  //   }
+  // };
+
+  const fetchData = async (nationalId) => {
     try {
-      const response = await fetch(`/pokeSprite/${nationalId}`);
+      const response = await fetch(`/pokeData/${nationalId}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setSelectedPokemon({ ...selectedPokemon, sprite: data.sprite });
+      setSelectedPokemon({
+        ...selectedPokemon,
+        name: data.name,
+        national_id: data.national_id,
+        location: data.location,
+        height: data.height,
+        weight: data.weight,
+        catch_rate: data.catch_rate,
+        male_gender_ratio: data.male_gender_ratio,
+        level_rate: data.level_rate,
+        sprite: data.sprite,
+        icon_1: data.icon_1,
+        icon_2: data.icon_2,
+        evolves_from: data.evolves_from,
+        evolve_method: data.evolve_method,
+        Attack: data.Attack,
+        Defense: data.Defense,
+        Speed: data.Speed,
+        HP: data.HP,
+        Special_Attack: data.Special_Attack,
+        Special_Defense: data.Special_Defense,
+        primary_type: data.primary_type,
+        secondary_type: data.secondary_type
+      });
+      
     } catch (error) {
-      console.error('Error fetching sprite:', error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -136,7 +269,9 @@ function App() {
                 style={{ marginRight: '10px', marginLeft: '20px' }}
               />
               <button
-                onClick={() => fetchSprite(pokemon.national_id)}
+                onClick={() => {
+                  fetchData(pokemon.national_id);
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -226,14 +361,147 @@ function App() {
                 />
                 
                 {/* Base Stat Container */}
-                <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
-                  <h2 style={{margin: '0', padding: '0' }}>ATK</h2>
-                  <h2 style={{margin: '0', padding: '0' }}>DEF</h2>
-                  <h2 style={{margin: '0', padding: '0' }}>SP. ATK</h2>
-                  <h2 style={{margin: '0', padding: '0' }}>SP. DEF</h2>
-                  <h2 style={{margin: '0', padding: '0' }}>HP</h2>
-                  <h2 style={{margin: '0', padding: '0' }}>SPD</h2>
+
+                <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                        <h2 style={{ margin: '0' }}> ATK </h2>
+                        <h2 style={{ margin: '0' }}> DEF </h2>
+                        <h2 style={{ margin: '0' }}> SP. ATK </h2>
+                        <h2 style={{ margin: '0' }}> SP. DEF </h2>
+                        <h2 style={{ margin: '0' }}> HP </h2>
+                        <h2 style={{ margin: '0' }}> SPD </h2>
+                      </div>
+                      
+                      <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ width: `${atkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
+                        <div style={{ width: `${defBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
+                        <div style={{ width: `${spAtkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
+                        <div style={{ width: `${spDefBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
+                        <div style={{ width: `${hpBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightSalmonCoral' }}></div>
+                        <div style={{ width: `${speedBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
+                      </div>
+
+                      <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Attack}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Defense}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Attack}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Defense}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.HP}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Speed}</div>
+                        </div>
                 </div>
+
+                {/* <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
+                <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> ATK </h2>
+                    </div>
+                    
+                    <div
+                      style={{
+                        width: `${atkBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'red', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.Attack}
+                    </div>
+
+                  </div>
+
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> DEF </h2>
+                    </div>
+
+                    <div
+                      style={{
+                        width: `${defBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'orange', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.Defense}
+                    </div>
+                  </div>
+
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> SP. ATK </h2>
+                    </div>
+                    
+                    <div
+                      style={{
+                        width: `${spAtkBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'yellow', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.Special_Attack}
+                    </div>
+                  </div>
+
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> SP. DEF </h2>
+                    </div>
+                    
+                    <div
+                      style={{
+                        width: `${spDefBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'green', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.Special_Defense}
+                    </div>
+                  </div>
+
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> HP </h2>
+                    </div>
+                    
+                    <div
+                      style={{
+                        width: `${speedBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'blue', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.HP}
+                    </div>
+                  </div>
+
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div>
+                      <h2 style={{ margin: '0' }}> SPD </h2>
+                    </div>
+                    
+                    <div
+                      style={{
+                        width: `${hpBarWidth}%`,
+                        height: '10px', // Set desired height for the bar
+                        backgroundColor: 'purple', // Choose a color for the bar
+                      }}>
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>
+                      {selectedPokemon.Speed}
+                    </div>
+                  </div>
+
+                </div> */}
 
                 {/* Other Info Container */}
                 <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
@@ -253,13 +521,27 @@ function App() {
                     <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
                       {/* <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px', backgroundColor: 'white' }}> */}
                       <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
-                        <h1 style={{margin: '0', padding: '0' }}>Pokémon Name</h1>
-                        <h2 style={{margin: '0', padding: '0' }}>#123</h2>
+                        <h1 style={{margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
+                        <h2 style={{margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
 
                         {/* Type Container */}
                         <div style={{ display: 'flex', flexDirection: 'row'}}>
-                          <h3 style = {{marginRight: '20px'}}>Type 1</h3>
-                          <h3>Type 2</h3>
+                          {/* <h3 style = {{marginRight: '20px'}}>{selectedPokemon.primary_type}</h3> */}
+                          <img 
+                            style = {{marginRight: '5px', width: '100px'}} 
+                            src={typeToImageMap[selectedPokemon.primary_type]} 
+                            alt={selectedPokemon.primary_type} 
+                          />
+
+                          {selectedPokemon.secondary_type !== null ? (
+                            <img
+                              style={{ width: '100px' }}
+                              src={typeToImageMap[selectedPokemon.secondary_type]}
+                              alt={selectedPokemon.secondary_type}
+                            />
+                          ) : (
+                            <p></p>
+                          )}
                         </div>
                       </div>
 
@@ -272,6 +554,7 @@ function App() {
                     {/* Location Container */}
                     <div  style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
                       <h2 style = {{margin: '0px'}}>Location Description</h2>
+                      {selectedPokemon.location}<br />
                       You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream?
                     </div>
 

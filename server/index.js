@@ -82,61 +82,122 @@ app.get("/pokes3", (req, res) => {
     });
 });
 
-/**
- * Allows for getting a specific pokemon's sprite.
- * Example URL: http://localhost:3001/pokeSprite/255
- */
-app.get("/pokeSprite/:national_id", (req, res) => {
-    const theQuery = `
-        SELECT * 
-        FROM pokemon_ref 
-        JOIN pokemon_pics ON pokemon_ref.national_id = pokemon_pics.national_id 
-        WHERE pokemon_ref.national_id = ?
-    `;
+// /**
+//  * Allows for getting a specific pokemon's sprite.
+//  * Example URL: http://localhost:3001/pokeSprite/255
+//  */
+// app.get("/pokeSprite/:national_id", (req, res) => {
+//     const theQuery = `
+//         SELECT * 
+//         FROM pokemon_ref 
+//         JOIN pokemon_pics ON pokemon_ref.national_id = pokemon_pics.national_id 
+//         WHERE pokemon_ref.national_id = ?
+//     `;
 
-    const values = [req.params.national_id];
-    db.query(theQuery, values, (err, rows) => {
-        if (err) {
-            console.error("Error retrieving sprite:", err);
-            res.status(500).send("Error retrieving sprite");
-            return;
-        }
-        if (rows.length !== 1) {
-            res.status(404).send("Valid pokes not found");
-        } else {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json({ sprite: rows[0].sprite });
-        }
-    });
-});
+//     const values = [req.params.national_id];
+//     db.query(theQuery, values, (err, rows) => {
+//         if (err) {
+//             console.error("Error retrieving sprite:", err);
+//             res.status(500).send("Error retrieving sprite");
+//             return;
+//         }
+//         if (rows.length !== 1) {
+//             res.status(404).send("Valid pokes not found");
+//         } else {
+//             res.setHeader('Content-Type', 'application/json');
+//             res.status(200).json({ sprite: rows[0].sprite });
+//         }
+//     });
+// });
+
+// /**
+//  * Allows for getting a specific pokemon's name.
+//  * Example URL: http://localhost:3001/pokeName/255
+//  */
+// app.get("/pokeName/:national_id", (req, res) => {
+//     const theQuery = `
+//         SELECT * 
+//         FROM pokemon_ref 
+//         WHERE pokemon_ref.national_id = ?
+//     `;
+
+//     const values = [req.params.national_id];
+//     db.query(theQuery, values, (err, rows) => {
+//         if (err) {
+//             console.error("Error retrieving sprite:", err);
+//             res.status(500).send("Error retrieving sprite");
+//             return;
+//         }
+//         if (rows.length !== 1) {
+//             res.status(404).send("Valid pokes not found");
+//         } else {
+//             res.setHeader('Content-Type', 'application/json');
+//             res.status(200).json({ name: rows[0].name,
+//             national_id : rows[0].national_id });
+//         }
+//     });
+// });
+
+
+
 
 /**
- * Allows for getting a specific pokemon's name.
+ * Allows for getting a specific pokemon's name, sprite, icon, 
+ * base stats, location, abilities, rates, and type(s).
  * Example URL: http://localhost:3001/pokeName/255
  */
-app.get("/pokeName/:national_id", (req, res) => {
+app.get("/pokeData/:national_id", (req, res) => {
     const theQuery = `
-        SELECT * 
-        FROM pokemon_ref 
+        SELECT *
+        FROM pokemon_ref
+            join pokemon_type pt on pokemon_ref.national_id = pt.national_id
+            join base_stats bs on pokemon_ref.national_id = bs.ID
+            join other_ref o on pokemon_ref.national_id = o.national_id
+            join pokemon_abilities pa on pokemon_ref.national_id = pa.national_id
+            join pokemon_location pl on pokemon_ref.national_id = pl.national_id
+            join pokemon_pics pp on pokemon_ref.national_id = pp.national_id
         WHERE pokemon_ref.national_id = ?
     `;
 
     const values = [req.params.national_id];
     db.query(theQuery, values, (err, rows) => {
         if (err) {
-            console.error("Error retrieving sprite:", err);
-            res.status(500).send("Error retrieving sprite");
+            console.error("Error retrieving data:", err);
+            res.status(500).send("Error retrieving data");
             return;
         }
         if (rows.length !== 1) {
             res.status(404).send("Valid pokes not found");
         } else {
             res.setHeader('Content-Type', 'application/json');
-            res.status(200).json({ name: rows[0].name,
-            national_id : rows[0].national_id });
+            res.status(200).json({ 
+                name: rows[0].name,
+                national_id : rows[0].national_id,
+                location : rows[0].location,
+                height : rows[0].height,
+                weight : rows[0].weight,
+                catch_rate : rows[0].catch_rate,
+                male_gender_ratio : rows[0].male_gender_ratio,
+                level_rate : rows[0].level_rate,
+                sprite : rows[0].sprite,
+                icon_1 : rows[0].icon_1,
+                icon_2 : rows[0].icon_2,
+                evolves_from : rows[0].evolves_from,
+                evolve_method : rows[0].evolve_method,
+                Attack : rows[0].Attack,
+                Defense : rows[0].Defense,
+                Speed : rows[0].Speed,
+                HP : rows[0].HP,
+                Special_Attack : rows[0].Special_Attack,
+                Special_Defense : rows[0].Special_Defense,
+                primary_type : rows[0].primary_type, 
+                secondary_type : rows[0].secondary_type,});
         }
     });
 });
+
+
+
 
 /**
  * Endpoint for retrieving party pokemon.
