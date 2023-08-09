@@ -1,9 +1,10 @@
-// export default App;
-
+// import React, { useState, useEffect, useRef } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Buffer } from 'buffer';
 import logo from './moe.png';
 import PreLoader1 from "./components/PreLoader1";
+import selectSound from './selectbetter.mp3';
+// import entrySound from './start.mp3';
 
 import normal from './type_NORMAL.png';
 import fire from './type_FIRE.png';
@@ -95,6 +96,12 @@ function App() {
   const [selectedPokemon, setSelectedPokemon] = useState();
   const [done, setDone] = useState(undefined);
   const [checkedPokemons, setCheckedPokemons] = useState({});
+  const [clicked1, setClicked1] = useState(false);
+  const [clicked2, setClicked2] = useState(false);
+  const [clicked3, setClicked3] = useState(false);
+  const [clicked4, setClicked4] = useState(false);
+  const [clicked5, setClicked5] = useState(false);
+  const [clicked6, setClicked6] = useState(false);
 
   const [atkBarWidth, setAtkBarWidth] = useState(0);
   const [defBarWidth, setDefBarWidth] = useState(0);
@@ -102,6 +109,15 @@ function App() {
   const [spDefBarWidth, setSpDefBarWidth] = useState(0);
   const [hpBarWidth, setHpBarWidth] = useState(0);
   const [speedBarWidth, setSpeedBarWidth] = useState(0);
+
+  //this was when you start the page, the PC starting sound would activate. doesn't really work though
+  // const audioRef = useRef(null);
+
+  // const playEntrySound = () => {
+  //   if (audioRef.current) {
+  //     audioRef.current.play();
+  //   }
+  // };
 
   const spriteDimensions = 250;
 
@@ -114,7 +130,23 @@ function App() {
       setSpeedBarWidth((selectedPokemon.Speed / maxSpeedValue) * 100);    
   };
 
+
+  const partyButtonStyle = {
+    backgroundColor: 'white',
+    height: '100px',
+    borderRadius: '10px',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: '5px solid #ffffff',
+  };
+
 const handleButtonClick = async (nationalId) => {
+  const audio = new Audio(selectSound);
+  audio.play();
   const fetchedPokemon = await fetchData(nationalId);
   calculateStats(fetchedPokemon);
 };
@@ -129,7 +161,12 @@ const maxHPValue = 255;
 const maxSpeedValue = 180;
 
 
+
+
   useEffect(() => {
+    
+    // playEntrySound();
+
     // Fetch data from the /pokes3 endpoint
     fetch('/pokes3')
       .then(response => {
@@ -145,6 +182,8 @@ const maxSpeedValue = 180;
       .catch(error => {
         setError(error.message);
       });
+
+
   }, []);
 
   if (error) {
@@ -197,7 +236,7 @@ const maxSpeedValue = 180;
     );
   });
 
-  //i didn't write this yo
+  //TODO i didn't write this yo
   const handleCheckboxChange = (pokemonId) => {
     setCheckedPokemons((prevChecked) => ({
       ...prevChecked,
@@ -209,6 +248,7 @@ const maxSpeedValue = 180;
   };
 
   return (
+    // <div className="App" onClick={playEntrySound} style={{ display: 'flex'}}>
     <div className="App" style={{ display: 'flex'}}>
 
       {/* Left Container */}
@@ -222,7 +262,8 @@ const maxSpeedValue = 180;
           <div style={{ padding: '0', margin: '0' }}>
             <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px'}}>PokéMoe Data</h1>
             {/* insert a description */}
-            &lt;3
+            Gotta woo 'em all~! &lt;3<br /> 
+            nvm idk what to put here
           </div>
         </div>
 
@@ -315,22 +356,52 @@ const maxSpeedValue = 180;
             // margin: '20px 0',
           }}
         >
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot 1')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked1
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked1(!clicked1)}>
           {/* Content for the first cell of the grid */}
         </button>
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot 2')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked2
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked2(!clicked2)}>
           {/* Content for the second cell of the grid */}
         </button>
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot 3')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked3
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked3(!clicked3)}>
           {/* Content for the third cell of the grid */}
         </button>
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot 4')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked4
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked4(!clicked4)}>
           {/* Content for the fourth cell of the grid */}
         </button>
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot uwu')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked5
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked5(!clicked5)}>
           {/* Content for the fifth cell of the grid */}
         </button>
-        <button style={{ backgroundColor: 'white', height: '100px', borderRadius: '10px' }} onClick={() => alert('Slot 6')}>
+        <button style={{ ...partyButtonStyle,
+                  backgroundImage: clicked6
+                  // TODO replace this code by accessing from the party instead of the selected poke
+                  ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})`
+                  : 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")',
+                  }} onClick={() => setClicked6(!clicked6)}>
           {/* Content for the sixth cell of the grid */}
         </button>
         </div>
@@ -508,7 +579,7 @@ const maxSpeedValue = 180;
           </div>
         ) : null}  
       </div>            
-        
+      {/* <audio ref={audioRef} src={entrySound} /> */}
     </div>
   );
   
