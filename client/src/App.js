@@ -22,6 +22,26 @@ import ghost from './type_GHOST.png';
 import dark from './type_DARK.png';
 import steel from './type_STEEL.png';
 import fairy from './type_FAIRY.png';
+import dragon from './type_DRAGON.png';
+
+import normal_accent from './normal_accent.png';
+import fire_accent from './fire_accent.png';
+import water_accent from './water_accent.png';
+import grass_accent from './grass_accent.png';
+import electric_accent from './electric_accent.png';
+import ice_accent from './ice_accent.png';
+import fighting_accent from './fighting_accent.png';
+import poison_accent from './poison_accent.png';
+import ground_accent from './ground_accent.png';
+import flying_accent from './flying_accent.png';
+import psychic_accent from './psychic_accent.png';
+import bug_accent from './bug_accent.png';
+import rock_accent from './rock_accent.png';
+import ghost_accent from './ghost_accent.png';
+import dark_accent from './dark_accent.png';
+import steel_accent from './steel_accent.png';
+import fairy_accent from './fairy_accent.png';
+import dragon_accent from './dragon_accent.png';
 
 const typeToImageMap = {
   Normal: normal,
@@ -40,10 +60,32 @@ const typeToImageMap = {
   Ghost: ghost,
   Dark: dark,
   Steel: steel,
-  Fairy: fairy
+  Fairy: fairy,
+  Dragon: dragon
   // Add more types and their corresponding image URLs here
 };
 
+const typeToAccentMap = {
+  Normal: normal_accent,
+  Fire: fire_accent,
+  Water: water_accent,
+  Grass: grass_accent,
+  Electric: electric_accent,
+  Ice: ice_accent,
+  Fighting: fighting_accent,
+  Poison: poison_accent,
+  Ground: ground_accent,
+  Flying: flying_accent,
+  Psychic: psychic_accent,
+  Bug: bug_accent,
+  Rock: rock_accent,
+  Ghost: ghost_accent,
+  Dark: dark_accent,
+  Steel: steel_accent,
+  Fairy: fairy_accent,
+  Dragon: dragon_accent
+  // Add more types and their corresponding image URLs here
+};
 
 
 function App() {
@@ -391,6 +433,35 @@ const speedBarWidth = (selectedPokemon.Speed / maxSpeedValue) * 100;
                         </div>
                 </div>
 
+                {/* <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
+                  <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> ATK </h2>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> DEF </h2>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> SP. ATK </h2>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> SP. DEF </h2>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> HP </h2>
+                        <h2 style={{ margin: '0', fontSize: '22px' }}> SPD </h2>
+                      </div>
+                      
+                      <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ width: `${atkBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
+                        <div style={{ width: `${defBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
+                        <div style={{ width: `${spAtkBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
+                        <div style={{ width: `${spDefBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
+                        <div style={{ width: `${hpBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'LightSalmonCoral' }}></div>
+                        <div style={{ width: `${speedBarWidth}%`, height: '10px', margin: '10px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
+                      </div>
+
+                      <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.Attack}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.Defense}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.Special_Attack}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.Special_Defense}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.HP}</div>
+                        <div style={{ flex: 1, textAlign: 'right', fontSize: '20px' }}>{selectedPokemon.Speed}</div>
+                        </div>
+                </div> */}
+
                 {/* <div  style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee'}}>
                 <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <div>
@@ -504,13 +575,40 @@ const speedBarWidth = (selectedPokemon.Speed / maxSpeedValue) * 100;
                 </div> */}
 
                 {/* Other Info Container */}
-                <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
-                  <h3 style={{margin: '0', padding: '0' }}>height</h3>
-                  <h3 style={{margin: '0', padding: '0' }}>weight</h3>
-                  <h3 style={{margin: '0', padding: '0' }}>gender rate</h3>
-                  <h3 style={{margin: '0', padding: '0' }}>catch rate</h3>
-                  <h3 style={{margin: '0', padding: '0' }}>level rate</h3>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                      
+                      <h3 style={{ margin: '0', padding: '0' }}>height</h3>
+                      <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
+
+                      {/* <div><h3 style={{margin: '0', padding: '0'}}>male</h3> {selectedPokemon.male_gender_ratio} %</div> */}
+
+                      <h3 style={{margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
+
+                    </div>
+                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                      
+                      <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
+                      <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
+
+                      {/* <div><h3 style={{margin: '0', padding: '0'}}>female</h3> {(100.00-selectedPokemon.male_gender_ratio).toFixed(2)} %</div> */}
+
+                      <h3 style={{margin: '0', padding: '0', marginTop: '5px' }}>level rate</h3> {selectedPokemon.level_rate}
+
+                    </div>
+                  </div>
                 </div>
+
+
+                {/* <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+                  <div><h3 style={{margin: '0', padding: '0' }}>height</h3> {selectedPokemon.height} m</div>
+                  <div><h3 style={{margin: '0', padding: '0' }}>weight</h3> {selectedPokemon.weight} kg</div>
+                  <div><h3 style={{margin: '0', padding: '0' }}>male rate</h3> {selectedPokemon.male_gender_ratio} %</div>
+                  <div><h3 style={{margin: '0', padding: '0' }}>catch rate</h3> {selectedPokemon.catch_rate} %</div>
+                  <div><h3 style={{margin: '0', padding: '0' }}>level rate</h3> {selectedPokemon.level_rate}</div>
+                </div> */}
 
               </div>
             ) : null}        
@@ -588,11 +686,9 @@ const speedBarWidth = (selectedPokemon.Speed / maxSpeedValue) * 100;
         {selectedPokemon ? (
           <div>
             <img
-              src={`data:image/png;base64,${Buffer.from(
-                selectedPokemon.sprite.data
-              ).toString('base64')}`}
-              alt={`${selectedPokemon.name} Sprite`}
-              style={{ maxWidth: '100%', height: '100%' }}
+              src={typeToAccentMap[selectedPokemon.primary_type]}
+              alt={`${selectedPokemon.primary_type} Accent`}
+              style={{ maxWidth: '100%', height: '100%', filter: 'opacity(50%)' }}
             />
           </div>
         ) : null}  
