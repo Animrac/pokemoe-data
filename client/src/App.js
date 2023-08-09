@@ -392,9 +392,8 @@ const maxSpeedValue = 180;
 
                 {/* Other Info Container */}
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
-                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                  <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
                       
                       <h3 style={{ margin: '0', padding: '0' }}>height</h3>
                       <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
@@ -404,7 +403,7 @@ const maxSpeedValue = 180;
                       <h3 style={{margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
 
                     </div>
-                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                    <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
                       
                       <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
                       <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
@@ -415,7 +414,6 @@ const maxSpeedValue = 180;
 
                     </div>
                   </div>
-                </div>
 
 
                 {/* <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
@@ -484,13 +482,14 @@ const maxSpeedValue = 180;
                       a better pokemon
 
                       <p style = {{fontWeight: 'bold', padding: '0', margin: '0', marginTop: '20px'}}>currently: </p><br />
-                      - neat sections mean we can just add the code into each section/resize once we get the endpoints working<br />
-                      - colors and new sections can be added if we need<br />
-                      - checkboxes do NOTHING atm. we also need a way to filter by caught/uncaught pokemon<br />
+                      - neat sections mean we can just add the code into each section once we get the endpoints<br />
+                      - this space looks REALLY empty without my notes. new sections can be added if we need<br />
+                      - checkboxes do nothing atm. we also need a way to filter by caught/uncaught pokemon<br />
+                      - party boxes<br />
+                      - WHY ISN'T HP WORKING<br />
+                      - i don't like how you can scroll the page<br />
                       - maybe we could add arrows to easily go between each pokemon by index<br />
-                      - until i understand how to call the pokemon's type, then we can do the cool backgrounds. for now i was able to put a stripey one and an elongated sprite on the right<br />
-                      - i couldn't figure out how to remove the little bit of white space at the bottom<br />
-                      - i know how to do html all by hand now XD <br />
+                      - i know how to do html all by hand now <br />
                     </div>
               </div>
             ) : null}        
