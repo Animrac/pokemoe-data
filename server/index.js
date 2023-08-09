@@ -255,6 +255,7 @@ app.post("/party", (req, res) => {
 });
 
 // TODO: should get: evolves from, evolves into, checkboxes
+// TODO: should also get abilities and their descriptions
 
 // Start the server
 app.listen(port, () => {
