@@ -603,12 +603,12 @@ function App() {
               </div>
 
               <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: `${atkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
-                <div style={{ width: `${defBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
-                <div style={{ width: `${spAtkBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
-                <div style={{ width: `${spDefBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
-                <div style={{ width: `${hpBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightCoral' }}></div>
-                <div style={{ width: `${speedBarWidth}%`, height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
+                <div style={{ width: `${atkBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
+                <div style={{ width: `${defBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
+                <div style={{ width: `${spAtkBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
+                <div style={{ width: `${spDefBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
+                <div style={{ width: `${hpBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightCoral' }}></div>
+                <div style={{ width: `${speedBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
               </div>
 
               <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
@@ -688,20 +688,38 @@ function App() {
                 </div>
               </div>
 
-              <div style={{ flex: 1, textAlign: 'right', alignItems: 'right' }}>
-                Evolves from or maybe arrow buttons go here
+              <div style={{ flex: 1, textAlign: 'right' }}>
+                <button 
+                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)} 
+                  style={{
+                    alignItems: 'center',
+                    margin: '10px', 
+                    fontSize: '50px',
+                    background: 'none',
+                    cursor: 'pointer',
+                    padding: 10, 
+                    width: '100px',
+                    height: '100px', 
+                    borderRadius: '10px', 
+                    backgroundColor: '#eeeeee' }}>
+                    &#706;
+                </button>
+                <button 
+                  onClick={() => handleButtonClick(selectedPokemon.national_id + 1)} 
+                  style={{
+                    alignItems: 'center',
+                    margin: '10px', 
+                    fontSize: '50px',
+                    background: 'none',
+                    cursor: 'pointer',
+                    padding: 10, 
+                    width: '100px',
+                    height: '100px', 
+                    borderRadius: '10px', 
+                    backgroundColor: '#eeeeee' }}>
+                    &#707;
+                </button>
               </div>
-
-              {/* <div style ={{ flex: 1, display: 'flex', flexDirection: 'row', textAlign: 'right', alignItems: 'right' }}>
-                      Evolves from or maybe arrow buttons go here
-                        {/* <div style= {{width: '100%'}}></div>
-                        <button style={{ ...arrowButtonStyle, transform: 'scaleX(-1)' }}>
-                          {/* Content arrow button */}
-              {/* </button>
-                        <button style={{ ...arrowButtonStyle }}>
-                          {/* Content arrow button */}
-              {/* </button> */}
-              {/* </div> */}
 
             </div>
 
