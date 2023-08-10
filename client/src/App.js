@@ -225,6 +225,10 @@ function App() {
       }
       const data = await response.json();
 
+      if (data.message === 'empty party') {
+        return;
+      }
+
       data.poke.forEach(p => {
         partySpriteBetter[p.slot] = `url(data:image/png;base64,${Buffer.from(p.sprite).toString('base64')})`;
       });
@@ -289,7 +293,20 @@ function App() {
   };
 
   const filteredData = data.filter(pokemon => {
-    const searchTerm = searchQuery.toLowerCase();
+    var searchTerm = searchQuery.toLowerCase();
+    if (searchTerm.includes('c:') && !searchTerm.includes('!c:')) {
+      searchTerm = searchTerm.slice(2);
+      return (
+        pokemon.caught && (pokemon.name.toLowerCase().includes(searchTerm) ||
+        pokemon.national_id.toString().includes(searchTerm))
+      );
+    } else if (searchTerm.includes('!c:')) {
+      searchTerm = searchTerm.slice(3);
+      return (
+        !pokemon.caught && (pokemon.name.toLowerCase().includes(searchTerm) ||
+        pokemon.national_id.toString().includes(searchTerm))
+      );
+    }
     return (
       pokemon.name.toLowerCase().includes(searchTerm) ||
       pokemon.national_id.toString().includes(searchTerm)
@@ -322,6 +339,9 @@ function App() {
           return pokemon;
         });
         setData(updatedData);
+
+        checkedPokemons[nationalId] = !checkedPokemons[nationalId];
+        setCheckedPokemons(checkedPokemons);
       } else {
         console.error('Failed to update caught status');
       }
@@ -439,8 +459,8 @@ function App() {
             backgroundImage: partySpriteBetter[1] ? partySpriteBetter[1] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(1, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(1, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[1] = !clicked1 ? newSprite : plusSign;
               setClicked1(!clicked1);
             } else {
@@ -459,8 +479,8 @@ function App() {
             backgroundImage: partySpriteBetter[2] ? partySpriteBetter[2] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(2, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(2, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[2] = !clicked2 ? newSprite : plusSign;
               setClicked2(!clicked2);
             } else {
@@ -479,8 +499,8 @@ function App() {
             backgroundImage: partySpriteBetter[3] ? partySpriteBetter[3] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(3, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(3, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[3] = !clicked3 ? newSprite : plusSign;
               setClicked3(!clicked3);
             } else {
@@ -499,8 +519,8 @@ function App() {
             backgroundImage: partySpriteBetter[4] ? partySpriteBetter[4] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(4, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(4, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[4] = !clicked4 ? newSprite : plusSign;
               setClicked4(!clicked4);
             } else {
@@ -519,8 +539,8 @@ function App() {
             backgroundImage: partySpriteBetter[5] ? partySpriteBetter[5] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(5, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(5, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[5] = !clicked5 ? newSprite : plusSign;
               setClicked5(!clicked5);
             } else {
@@ -539,8 +559,8 @@ function App() {
             backgroundImage: partySpriteBetter[6] ? partySpriteBetter[6] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(6, selectedPokemon.national_id) 
-              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(6, selectedPokemon.national_id)
+                ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[6] = !clicked6 ? newSprite : plusSign;
               setClicked6(!clicked6);
             } else {
@@ -580,7 +600,10 @@ function App() {
             />
 
             {/* Base Stat Container */}
-            <div style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{
+              padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row',
+              borderRadius: '10px', backgroundColor: '#eeeeee'
+            }}>
               <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                 <h2 style={{ margin: '0' }}> ATK </h2>
                 <h2 style={{ margin: '0' }}> DEF </h2>

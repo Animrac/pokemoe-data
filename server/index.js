@@ -26,7 +26,7 @@ const db = mysql.createPool({
     // host: 'localhost',  // Change to localhost
     // port: 3306,         // Specify the port
     // user: 'root',       // Use the root user
-    // password: 'PWORD',  // Use the specified password
+    // password: 'PW',  // Use the specified password
     // database: 'pokesand', // Replace if needed
 
     waitForConnections: true,
@@ -145,7 +145,8 @@ app.get("/party", (req, res) => {
             return;
         }
         if (result.length === 0) {
-            res.status(404).send("Valid pokes not found");
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json({ message: 'empty party' });
             return;
         }
         res.setHeader('Content-Type', 'application/json');
