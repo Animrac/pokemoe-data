@@ -322,7 +322,7 @@ function App() {
 
   const handleCheckboxChange = async (nationalId) => {
     try {
-      const response = await fetch('http://localhost:3001/caught', {
+      const response = await fetch('/caught', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
