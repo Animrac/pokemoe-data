@@ -1,10 +1,9 @@
-// import React, { useState, useEffect, useRef } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Buffer } from 'buffer';
 import logo from './moe.png';
 import PreLoader1 from "./components/PreLoader1";
 import selectSound from './selectbetter.mp3';
-// import entrySound from './start.mp3';
+import entrySound from './start.mp3';
 
 import normal from './type_NORMAL.png';
 import fire from './type_FIRE.png';
@@ -63,7 +62,6 @@ const typeToImageMap = {
   Steel: steel,
   Fairy: fairy,
   Dragon: dragon
-  // Add more types and their corresponding image URLs here
 };
 
 const typeToAccentMap = {
@@ -85,10 +83,8 @@ const typeToAccentMap = {
   Steel: steel_accent,
   Fairy: fairy_accent,
   Dragon: dragon_accent
-  // Add more types and their corresponding image URLs here
 };
 
-const partySprite = {};
 const partySpriteBetter = [];
 const plusSign = `url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")`;
 
@@ -113,14 +109,6 @@ function App() {
   const [spDefBarWidth, setSpDefBarWidth] = useState(0);
   const [hpBarWidth, setHpBarWidth] = useState(0);
   const [speedBarWidth, setSpeedBarWidth] = useState(0);
-
-  //this was when you start the page, the PC starting sound would activate. doesn't really work though
-  // const audioRef = useRef(null);
-  // const playEntrySound = () => {
-  //   if (audioRef.current) {
-  //     audioRef.current.play();
-  //   }
-  // };
 
   const spriteDimensions = 250;
 
@@ -165,6 +153,11 @@ function App() {
     calculateStats(fetchedPokemon);
   };
 
+  //easter egg
+  const handleLogoClick = async () => {
+    const audio = new Audio(entrySound);
+    audio.play();
+  };
 
   // Define maximum values for each stat (adjust these according to your data)
   const maxATKValue = 190;
@@ -173,7 +166,6 @@ function App() {
   const maxSpDefValue = 230;
   const maxHPValue = 255;
   const maxSpeedValue = 180;
-
 
   async function partyData(slot, nationalId) {
     const responseData = {};
@@ -201,9 +193,6 @@ function App() {
   }
 
   useEffect(() => {
-
-    // playEntrySound();
-
     // Fetch data from the /pokes3 endpoint
     fetch('/pokes3')
       .then(response => {
@@ -227,12 +216,6 @@ function App() {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  const setChecked = (poke) => {
-    poke.forEach(p => {
-      checkedPokemons[p.national_id] = p.caught ? true : false;
-    });
-  };
 
   async function partySprites() {
     try {
@@ -313,6 +296,13 @@ function App() {
     );
   });
 
+  const setChecked = (poke) => {
+    poke.forEach(p => {
+      checkedPokemons[p.national_id] = p.caught ? true : false;
+    });
+    setCheckedPokemons(checkedPokemons);
+  };
+
   const handleCheckboxChange = async (nationalId) => {
     try {
       const response = await fetch('http://localhost:3001/caught', {
@@ -341,7 +331,6 @@ function App() {
   };
 
   return (
-    // <div className="App" onClick={playEntrySound} style={{ display: 'flex'}}>
     <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
       {/* Left Container */}
@@ -349,12 +338,11 @@ function App() {
 
         {/* Top-Left Container */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
-          <div>
+          <div onClick={handleLogoClick}>
             <img src={logo} alt={`Logo`} style={{ width: '120px' }} />
           </div>
           <div style={{ padding: '0', margin: '0' }}>
             <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px' }}>PokéMoe Data</h1>
-            {/* insert a description */}
             Gotta woo 'em all &lt;3<br />
             nvm
           </div>
@@ -379,7 +367,6 @@ function App() {
 
         {!done ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
-          // <div>Loading</div>
         ) : filteredData.length > 0 ? (
           <div style={{ padding: '20px' }}>
             <div className="scroll-container" style={{ maxHeight: '250px', minHeight: '250px', borderRadius: '10px' }}>
@@ -436,7 +423,6 @@ function App() {
           <p style={{ minHeight: '218px', fontWeight: 'bold', color: 'red' }}>No matching Pokémon found.</p>
         )}
 
-
         {/* Grid */}
         <div
           style={{
@@ -446,7 +432,6 @@ function App() {
             paddingTop: '0',
             paddingBottom: '0',
             gap: '10px',
-            // margin: '20px 0',
           }}
         >
           <button style={{
@@ -454,7 +439,8 @@ function App() {
             backgroundImage: partySpriteBetter[1] ? partySpriteBetter[1] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(1, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(1, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[1] = !clicked1 ? newSprite : plusSign;
               setClicked1(!clicked1);
             } else {
@@ -473,7 +459,8 @@ function App() {
             backgroundImage: partySpriteBetter[2] ? partySpriteBetter[2] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(2, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(2, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[2] = !clicked2 ? newSprite : plusSign;
               setClicked2(!clicked2);
             } else {
@@ -492,7 +479,8 @@ function App() {
             backgroundImage: partySpriteBetter[3] ? partySpriteBetter[3] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(3, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(3, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[3] = !clicked3 ? newSprite : plusSign;
               setClicked3(!clicked3);
             } else {
@@ -511,7 +499,8 @@ function App() {
             backgroundImage: partySpriteBetter[4] ? partySpriteBetter[4] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(4, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(4, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[4] = !clicked4 ? newSprite : plusSign;
               setClicked4(!clicked4);
             } else {
@@ -530,7 +519,8 @@ function App() {
             backgroundImage: partySpriteBetter[5] ? partySpriteBetter[5] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(5, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(5, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[5] = !clicked5 ? newSprite : plusSign;
               setClicked5(!clicked5);
             } else {
@@ -549,7 +539,8 @@ function App() {
             backgroundImage: partySpriteBetter[6] ? partySpriteBetter[6] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              const newSprite = partyData(6, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              const newSprite = partyData(6, selectedPokemon.national_id) 
+              ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[6] = !clicked6 ? newSprite : plusSign;
               setClicked6(!clicked6);
             } else {
@@ -576,7 +567,6 @@ function App() {
           textAlign: 'left',
           padding: '20px',
           backgroundImage: `url(${require("./stripesbg.jpg")})`
-          // backgroundColor: '#f8fcf3',
         }}>
         {/* Sprite Image */}
         {selectedPokemon ? (
@@ -590,7 +580,6 @@ function App() {
             />
 
             {/* Base Stat Container */}
-
             <div style={{ padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                 <h2 style={{ margin: '0' }}> ATK </h2>
@@ -621,7 +610,6 @@ function App() {
             </div>
 
             {/* Other Info Container */}
-
             <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
@@ -645,15 +633,6 @@ function App() {
               </div>
             </div>
 
-
-            {/* <div  style={{ padding: '10px', display: 'flex', flexDirection: 'column', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
-                  <div><h3 style={{margin: '0', padding: '0' }}>height</h3> {selectedPokemon.height} m</div>
-                  <div><h3 style={{margin: '0', padding: '0' }}>weight</h3> {selectedPokemon.weight} kg</div>
-                  <div><h3 style={{margin: '0', padding: '0' }}>male rate</h3> {selectedPokemon.male_gender_ratio} %</div>
-                  <div><h3 style={{margin: '0', padding: '0' }}>catch rate</h3> {selectedPokemon.catch_rate} %</div>
-                  <div><h3 style={{margin: '0', padding: '0' }}>level rate</h3> {selectedPokemon.level_rate}</div>
-                </div> */}
-
           </div>
         ) : null}
 
@@ -661,14 +640,12 @@ function App() {
         {selectedPokemon ? (
           <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '10px', backgroundColor: '#dedede' }}>
             <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
-              {/* <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px', backgroundColor: 'white' }}> */}
               <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
                 <h1 style={{ margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
                 <h2 style={{ margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
 
                 {/* Type Container */}
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  {/* <h3 style = {{marginRight: '20px'}}>{selectedPokemon.primary_type}</h3> */}
                   <img
                     style={{ marginRight: '5px', width: '100px' }}
                     src={typeToImageMap[selectedPokemon.primary_type]}
@@ -687,7 +664,7 @@ function App() {
                 </div>
               </div>
 
-              <div style={{ flex: '1',  textAlign: 'right'  }}>
+              <div style={{ flex: '1', textAlign: 'right' }}>
                 <button
                   onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
                   style={{
@@ -696,7 +673,7 @@ function App() {
                     fontSize: '50px',
                     background: 'none',
                     cursor: 'pointer',
-                    padding: 10, 
+                    padding: 10,
                     border: '5px solid #eeeeee',
                     width: '100px',
                     height: '100px',
@@ -706,7 +683,7 @@ function App() {
                   }}
                 >
                   {/* colors already seemed good */}
-                  <div style = {{color: '#000000'}}>&#10148;</div>
+                  <div style={{ color: '#000000' }}>&#10148;</div>
                 </button>
                 <button
                   onClick={() => handleButtonClick(selectedPokemon.national_id + 1)}
@@ -727,14 +704,12 @@ function App() {
                 </button>
               </div>
 
-
             </div>
 
             {/* Location Container */}
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
-              {/* You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream? */}
             </div>
 
             {/* Ability List Container */}
@@ -799,10 +774,9 @@ function App() {
           </div>
         ) : null}
       </div>
-      {/* <audio ref={audioRef} src={entrySound} /> */}
     </div>
   );
 
-        }
+}
 
 export default App;
