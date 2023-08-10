@@ -1,7 +1,7 @@
 # pokemoe-data
-is any further description necessary
+A Pokedex which allows users to create a party of pokemon and track what they have caught. It is coded in JavaScript, using React and Node, with a MySQL database.
 
-# Install instructions
+# Local Install instructions
 1. Download repository.
 1. Open the terminal and run `npm install` in both the `client` and `server` directories to download dependencies.
 1. Optionally run additional install of `npm install --save-dev @babel/plugin-proposal-private-property-in-object` in the `client` directory to make an annoying (ineffectual) error go away.

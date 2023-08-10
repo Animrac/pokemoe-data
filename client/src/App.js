@@ -111,14 +111,19 @@ function App() {
   const [speedBarWidth, setSpeedBarWidth] = useState(0);
 
   const spriteDimensions = 250;
+  const maxBaseValue = 255; // Maximum values for each base stat
 
+  /**
+   * Set Base Stat bars of selected pokemon.
+   * @param {JSON} selectedPokemon 
+   */
   const calculateStats = (selectedPokemon) => {
-    setAtkBarWidth((selectedPokemon.Attack / maxATKValue) * 100);
-    setDefBarWidth((selectedPokemon.Defense / maxDEFValue) * 100);
-    setSpAtkBarWidth((selectedPokemon.Special_Attack / maxSpAtkValue) * 100);
-    setSpDefBarWidth((selectedPokemon.Special_Defense / maxSpDefValue) * 100);
-    setHpBarWidth((selectedPokemon.HP / maxHPValue) * 100);
-    setSpeedBarWidth((selectedPokemon.Speed / maxSpeedValue) * 100);
+    setAtkBarWidth((selectedPokemon.Attack / maxBaseValue) * 100);
+    setDefBarWidth((selectedPokemon.Defense / maxBaseValue) * 100);
+    setSpAtkBarWidth((selectedPokemon.Special_Attack / maxBaseValue) * 100);
+    setSpDefBarWidth((selectedPokemon.Special_Defense / maxBaseValue) * 100);
+    setHpBarWidth((selectedPokemon.HP / maxBaseValue) * 100);
+    setSpeedBarWidth((selectedPokemon.Speed / maxBaseValue) * 100);
   };
 
   const arrowButtonStyle = {
@@ -145,7 +150,11 @@ function App() {
     border: '5px solid #ffffff',
   };
 
-  // when selecting a pokemon to view from the list
+
+  /**
+   * Fetches data from server about specific pokemon, and plays sound when executed.
+   * @param {int} nationalId 
+   */
   const handleButtonClick = async (nationalId) => {
     const audio = new Audio(selectSound);
     audio.play();
@@ -153,20 +162,20 @@ function App() {
     calculateStats(fetchedPokemon);
   };
 
-  //easter egg
+  /**
+   * Easter egg.
+   */
   const handleLogoClick = async () => {
     const audio = new Audio(entrySound);
     audio.play();
   };
 
-  // Define maximum values for each stat (adjust these according to your data)
-  const maxATKValue = 190;
-  const maxDEFValue = 230;
-  const maxSpAtkValue = 190;
-  const maxSpDefValue = 230;
-  const maxHPValue = 255;
-  const maxSpeedValue = 180;
-
+  /**
+   * Put selected pokemon into party on server.
+   * @param {int} slot 
+   * @param {int} nationalId 
+   * @returns true if successful.
+   */
   async function partyData(slot, nationalId) {
     var responseData = {};
     try {
@@ -193,8 +202,10 @@ function App() {
     return ('message' in responseData) ? true : false;
   }
 
+  /**
+   * Gets initial information for Pokemon list and party.
+   */
   useEffect(() => {
-    // Fetch data from the /pokes3 endpoint
     fetch('/pokes3')
       .then(response => {
         if (!response.ok) {
@@ -214,10 +225,17 @@ function App() {
     partySprites();
   }, []);
 
+  /**
+   * Ability to show errors if crashed.
+   */
   if (error) {
     return <div>Error: {error}</div>;
   }
 
+  /**
+   * Gets current party data from server, called in useEffect when app loads.
+   * @returns nothing
+   */
   async function partySprites() {
     try {
       const response = await fetch(`/party`);
@@ -258,6 +276,11 @@ function App() {
     }
   };
 
+  /**
+   * Gets detailed information about a specified pokemon.
+   * @param {int} nationalId 
+   * @returns JSON of pokemon data
+   */
   const fetchData = async (nationalId) => {
     try {
       const response = await fetch(`/pokeData/${nationalId}`);
@@ -274,6 +297,11 @@ function App() {
     }
   };
 
+  /**
+   * Gets detailed evolution information about selected pokemon.
+   * Called automatically by fetchData.
+   * @param {int} nationalId 
+   */
   const fetchEvData = async (nationalId) => {
     try {
       const response2 = await fetch(`/evolvesinto/${nationalId}`);
@@ -293,19 +321,22 @@ function App() {
     }
   };
 
+  /**
+   * Allows for filtering of Pokemon list without dialing out to server each time.
+   */
   const filteredData = data.filter(pokemon => {
     var searchTerm = searchQuery.toLowerCase();
     if (searchTerm.includes('c:') && !searchTerm.includes('!c:')) {
       searchTerm = searchTerm.slice(2);
       return (
         pokemon.caught && (pokemon.name.toLowerCase().includes(searchTerm) ||
-        pokemon.national_id.toString().includes(searchTerm))
+          pokemon.national_id.toString().includes(searchTerm))
       );
     } else if (searchTerm.includes('!c:')) {
       searchTerm = searchTerm.slice(3);
       return (
         !pokemon.caught && (pokemon.name.toLowerCase().includes(searchTerm) ||
-        pokemon.national_id.toString().includes(searchTerm))
+          pokemon.national_id.toString().includes(searchTerm))
       );
     }
     return (
@@ -314,6 +345,11 @@ function App() {
     );
   });
 
+  /**
+   * Set each Pokemon in the list as caught/not caught as necessary.
+   * Called automatically by useEffect when app starts.
+   * @param {JSON} poke 
+   */
   const setChecked = (poke) => {
     poke.forEach(p => {
       checkedPokemons[p.national_id] = p.caught ? true : false;
@@ -321,6 +357,10 @@ function App() {
     setCheckedPokemons(checkedPokemons);
   };
 
+  /**
+   * Updates caught status of specified Pokemon, informs server of change.
+   * @param {int} nationalId 
+   */
   const handleCheckboxChange = async (nationalId) => {
     try {
       const response = await fetch('/caught', {
@@ -351,6 +391,9 @@ function App() {
     }
   };
 
+  /**
+   * The visual stuff.
+   */
   return (
     <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
