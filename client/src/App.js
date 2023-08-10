@@ -343,7 +343,7 @@ function App() {
 
   return (
     // <div className="App" onClick={playEntrySound} style={{ display: 'flex'}}>
-    <div className="App" style={{ display: 'flex' }}>
+    <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
       {/* Left Container */}
       <div className="left-container" style={{ width: '470px', textAlign: 'center', backgroundColor: '#EEEEEE' }}>
@@ -629,7 +629,7 @@ function App() {
                 <h3 style={{ margin: '0', padding: '0' }}>height</h3>
                 <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
 
-                {/* <div><h3 style={{margin: '0', padding: '0'}}>male</h3> {selectedPokemon.male_gender_ratio} %</div> */}
+                <div><h3 style={{ margin: '0', padding: '0' }}>male</h3> {selectedPokemon.male_gender_ratio} %</div>
 
                 <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
 
@@ -639,7 +639,7 @@ function App() {
                 <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
                 <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
 
-                {/* <div><h3 style={{margin: '0', padding: '0'}}>female</h3> {(100.00-selectedPokemon.male_gender_ratio).toFixed(2)} %</div> */}
+                <div><h3 style={{ margin: '0', padding: '0' }}>female</h3> {(100.00 - selectedPokemon.male_gender_ratio).toFixed(2)} %</div>
 
                 <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>level rate</h3> {selectedPokemon.level_rate}
 
@@ -660,7 +660,7 @@ function App() {
 
         {/* Name Container */}
         {selectedPokemon ? (
-          <div style={{ display: 'flex', flexDirection: 'column', padding: '20px', borderRadius: '10px', backgroundColor: '#dedede' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '10px', backgroundColor: '#dedede' }}>
             <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
               {/* <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px', backgroundColor: 'white' }}> */}
               <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
@@ -688,9 +688,9 @@ function App() {
                 </div>
               </div>
 
-              <div style={{ flex: 1, textAlign: 'right' }}>
-                <button 
-                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)} 
+              <div style={{ flex: '1',  textAlign: 'right'  }}>
+                <button
+                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
                   style={{
                     alignItems: 'center',
                     margin: '10px', 
@@ -698,14 +698,20 @@ function App() {
                     background: 'none',
                     cursor: 'pointer',
                     padding: 10, 
+                    border: '5px solid #eeeeee',
                     width: '100px',
-                    height: '100px', 
+                    height: '100px',
                     borderRadius: '10px', 
-                    backgroundColor: '#eeeeee' }}>
-                    &#706;
+                    backgroundColor: '#eeeeee',
+                    backgroundRepeat: 'no-repeat',
+                    transform: 'rotateY(180deg)',
+                  }}
+                >
+                  {/* colors already seemed good */}
+                  <div style = {{color: '#000000'}}>&#10148;</div>
                 </button>
-                <button 
-                  onClick={() => handleButtonClick(selectedPokemon.national_id + 1)} 
+                <button
+                  onClick={() => handleButtonClick(selectedPokemon.national_id + 1)}
                   style={{
                     alignItems: 'center',
                     margin: '10px', 
@@ -714,12 +720,17 @@ function App() {
                     cursor: 'pointer',
                     padding: 10, 
                     width: '100px',
-                    height: '100px', 
+                    height: '100px',
                     borderRadius: '10px', 
-                    backgroundColor: '#eeeeee' }}>
-                    &#707;
+                    border: '5px solid #eeeeee',
+                    backgroundColor: '#eeeeee',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                >
+                  &#10148;
                 </button>
               </div>
+
 
             </div>
 
@@ -727,7 +738,7 @@ function App() {
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
-              You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream?
+
             </div>
 
             {/* Ability List Container */}
@@ -739,24 +750,14 @@ function App() {
             {/* Evolves To Container */}
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Evolves to:</h2>
-              a better pokemon
 
-              <p style={{ fontWeight: 'bold', padding: '0', margin: '0', marginTop: '20px' }}>currently: </p><br />
-              - neat sections mean we can just add the code into each section once we get the endpoints<br />
-              - this space looks REALLY empty without my notes. new sections can be added if we need<br />
-              - checkboxes do nothing atm. we also need a way to filter by caught/uncaught pokemon<br />
-              - party boxes<br />
-              - WHY ISN'T HP WORKING<br />
-              - i don't like how you can scroll the page<br />
-              - maybe we could add arrows to easily go between each pokemon by index<br />
-              - i know how to do html all by hand now <br />
             </div>
           </div>
         ) : null}
       </div>
 
       {/* Right Container */}
-      <div style={{ display: 'flex', width: '100px' }}>
+      <div style={{ display: 'flex', width: '150px' }}>
         {/* This part contains the content */}
         {selectedPokemon ? (
           <div>
