@@ -86,7 +86,7 @@ const typeToAccentMap = {
 };
 
 const partySpriteBetter = [];
-const plusSign = `url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")`;
+const plusSign = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cline x1='32' y1='12' x2='32' y2='52' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3Cline x1='12' y1='32' x2='52' y2='32' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3C/svg%3E")`;
 
 function App() {
   const [data, setData] = useState([]);
@@ -168,7 +168,7 @@ function App() {
   const maxSpeedValue = 180;
 
   async function partyData(slot, nationalId) {
-    const responseData = {};
+    var responseData = {};
     try {
       const response = await fetch('/party', {
         method: 'POST',
@@ -189,7 +189,8 @@ function App() {
     } catch (error) {
       return false;
     }
-    return responseData.includes('message') ? true : false;
+
+    return ('message' in responseData) ? true : false;
   }
 
   useEffect(() => {
