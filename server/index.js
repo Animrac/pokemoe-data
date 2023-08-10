@@ -16,10 +16,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database connection
 const db = mysql.createPool({
+    //Remote DB
     host: 'us-cdbr-east-06.cleardb.net',
     user: 'bbc1d236a2fdf8',
     password: 'c0f12074',
     database: 'heroku_7dd2ee314208c5d',
+
+    //Local DB
+    // host: 'localhost',  // Change to localhost
+    // port: 3306,         // Specify the port
+    // user: 'root',       // Use the root user
+    // password: 'PWORD',  // Use the specified password
+    // database: 'pokesand', // Replace if needed
+
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
