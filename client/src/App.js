@@ -105,6 +105,7 @@ function App() {
   const [clicked4, setClicked4] = useState(false);
   const [clicked5, setClicked5] = useState(false);
   const [clicked6, setClicked6] = useState(false);
+  const [evolvesToData, setEvolvesToData] = useState([]);
 
   const [atkBarWidth, setAtkBarWidth] = useState(0);
   const [defBarWidth, setDefBarWidth] = useState(0);
@@ -276,31 +277,29 @@ function App() {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      const newSelectedPokemon = {
-        name: data.name,
-        national_id: data.national_id,
-        location: data.location,
-        height: data.height,
-        weight: data.weight,
-        catch_rate: data.catch_rate,
-        male_gender_ratio: data.male_gender_ratio,
-        level_rate: data.level_rate,
-        sprite: data.sprite,
-        icon_1: data.icon_1,
-        icon_2: data.icon_2,
-        evolves_from: data.evolves_from,
-        evolve_method: data.evolve_method,
-        Attack: data.Attack,
-        Defense: data.Defense,
-        Speed: data.Speed,
-        HP: data.HP,
-        Special_Attack: data.Special_Attack,
-        Special_Defense: data.Special_Defense,
-        primary_type: data.primary_type,
-        secondary_type: data.secondary_type
-      };
+      const newSelectedPokemon = data;
       setSelectedPokemon(newSelectedPokemon);
+      fetchEvData(nationalId);
       return newSelectedPokemon; // Return the fetched Pokemon data
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchEvData = async (nationalId) => {
+    try {
+      const response2 = await fetch(`/evolvesinto/${nationalId}`);
+      if (!response2.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const evdata = await response2.json();
+
+      if ('message' in evdata) {
+        setEvolvesToData([]); // No evolutions, so set empty array
+      } else {
+        setEvolvesToData(evdata.poke); // Set the evolution data array
+      }
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -688,18 +687,26 @@ function App() {
                 </div>
               </div>
 
+              <div style={{ flex: 1, textAlign: 'right' }}>
+                <button
+                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
               <div style={{ flex: '1',  textAlign: 'right'  }}>
                 <button
                   onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
                   style={{
                     alignItems: 'center',
-                    margin: '10px', 
+                    margin: '10px',
                     fontSize: '50px',
                     background: 'none',
                     cursor: 'pointer',
                     padding: 10, 
                     border: '5px solid #eeeeee',
                     width: '100px',
+                    height: '100px',
+                    borderRadius: '10px',
+                    backgroundColor: '#eeeeee'
+                  }}>
+                  &#706;
                     height: '100px',
                     borderRadius: '10px', 
                     backgroundColor: '#eeeeee',
@@ -714,12 +721,17 @@ function App() {
                   onClick={() => handleButtonClick(selectedPokemon.national_id + 1)}
                   style={{
                     alignItems: 'center',
-                    margin: '10px', 
+                    margin: '10px',
                     fontSize: '50px',
                     background: 'none',
                     cursor: 'pointer',
-                    padding: 10, 
+                    padding: 10,
                     width: '100px',
+                    height: '100px',
+                    borderRadius: '10px',
+                    backgroundColor: '#eeeeee'
+                  }}>
+                  &#707;
                     height: '100px',
                     borderRadius: '10px', 
                     border: '5px solid #eeeeee',
@@ -738,20 +750,54 @@ function App() {
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
-
+              {/* You can find this pokemon in the dirt where you live. Here is some other information you might find helpful. Just kidding. Now I wonder if this description will run off the page. Oh it didn't. I guess that's good. I'm hungry, should I eat ice cream? */}
             </div>
 
             {/* Ability List Container */}
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Ability List</h2>
-              insert list of poke abilities, idk how
+              <ul style={{ margin: 0, paddingLeft: '50px', listStyle: 'none' }}>
+                {[
+                  { ability: selectedPokemon.ability_1, description: selectedPokemon.ability_1_desc },
+                  { ability: selectedPokemon.ability_2, description: selectedPokemon.ability_2_desc },
+                  { ability: selectedPokemon.hidden_ability, description: selectedPokemon.ability_h_desc },
+                ].map((entry, index) => (
+                  entry.ability && (
+                    <li key={index} style={{ marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h3 style={{ padding: 0, margin: '5px 0' }}>
+                          {entry.ability === selectedPokemon.hidden_ability
+                            ? <span style={{ color: 'grey' }}>{entry.ability}</span>
+                            : entry.ability}
+                        </h3>
+                        <p style={{ padding: 0, margin: 0, paddingLeft: '20px' }}>{entry.description}</p>
+                      </div>
+                    </li>
+                  )
+                ))}
+              </ul>
             </div>
 
             {/* Evolves To Container */}
             <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
-              <h2 style={{ margin: '0px' }}>Evolves to:</h2>
-
+              <h2 style={{ margin: '0px', paddingBottom: '10px' }}>Evolves to:</h2>
+              {evolvesToData.length > 0 ? (
+                evolvesToData.map((evolution, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <img src={`data:image/png;base64,${Buffer.from(evolution.sprite.data).toString('base64')}`}
+                      alt={`${evolution.name} Sprite`}
+                      style={{ width: '100px', height: '100px', marginRight: '10px' }} />
+                    <div>
+                      <p style={{ fontSize: '25px', margin: '0' }}>{evolution.name}</p>
+                      <p style={{ margin: '0' }}>{evolution.evolve_method}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: '20px', margin: '0 0 0 20px' }}>No evolutions :&lt;</p>
+              )}
             </div>
+
           </div>
         ) : null}
       </div>
