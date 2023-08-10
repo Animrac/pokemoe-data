@@ -687,9 +687,6 @@ function App() {
                 </div>
               </div>
 
-              <div style={{ flex: 1, textAlign: 'right' }}>
-                <button
-                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
               <div style={{ flex: '1',  textAlign: 'right'  }}>
                 <button
                   onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
@@ -704,14 +701,8 @@ function App() {
                     width: '100px',
                     height: '100px',
                     borderRadius: '10px',
-                    backgroundColor: '#eeeeee'
-                  }}>
-                  &#706;
-                    height: '100px',
-                    borderRadius: '10px', 
                     backgroundColor: '#eeeeee',
-                    backgroundRepeat: 'no-repeat',
-                    transform: 'rotateY(180deg)',
+                    transform: 'rotateY(180deg)'
                   }}
                 >
                   {/* colors already seemed good */}
@@ -725,20 +716,13 @@ function App() {
                     fontSize: '50px',
                     background: 'none',
                     cursor: 'pointer',
+                    border: '5px solid #eeeeee',
                     padding: 10,
                     width: '100px',
                     height: '100px',
                     borderRadius: '10px',
                     backgroundColor: '#eeeeee'
                   }}>
-                  &#707;
-                    height: '100px',
-                    borderRadius: '10px', 
-                    border: '5px solid #eeeeee',
-                    backgroundColor: '#eeeeee',
-                    backgroundRepeat: 'no-repeat',
-                  }}
-                >
                   &#10148;
                 </button>
               </div>
@@ -819,6 +803,6 @@ function App() {
     </div>
   );
 
-}
+        }
 
 export default App;
