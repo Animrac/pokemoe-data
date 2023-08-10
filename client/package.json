@@ -30,7 +30,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "https://pokemoe-server-51c05b8425e0.herokuapp.com", 
+  "proxy": "http://localhost:3001", 
   "browserslist": {
     "production": [
       ">0.2%",
