@@ -689,7 +689,7 @@ function App() {
 
               <div style={{ flex: '1', textAlign: 'right' }}>
                 <button
-                  onClick={() => handleButtonClick(selectedPokemon.national_id - 1)}
+                  onClick={() => selectedPokemon.national_id > 252 ? handleButtonClick(selectedPokemon.national_id - 1) : alert('No Pokemon to the left!')}
                   style={{
                     alignItems: 'center',
                     margin: '10px',
@@ -709,7 +709,7 @@ function App() {
                   <div style={{ color: '#000000' }}>&#10148;</div>
                 </button>
                 <button
-                  onClick={() => handleButtonClick(selectedPokemon.national_id + 1)}
+                  onClick={() => selectedPokemon.national_id < 386 ? handleButtonClick(selectedPokemon.national_id + 1) : alert('No Pokemon to the right!')}
                   style={{
                     alignItems: 'center',
                     margin: '10px',
