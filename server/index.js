@@ -83,65 +83,6 @@ app.get("/pokes3", (req, res) => {
     });
 });
 
-// /**
-//  * Allows for getting a specific pokemon's sprite.
-//  * Example URL: http://localhost:3001/pokeSprite/255
-//  */
-// app.get("/pokeSprite/:national_id", (req, res) => {
-//     const theQuery = `
-//         SELECT * 
-//         FROM pokemon_ref 
-//         JOIN pokemon_pics ON pokemon_ref.national_id = pokemon_pics.national_id 
-//         WHERE pokemon_ref.national_id = ?
-//     `;
-
-//     const values = [req.params.national_id];
-//     db.query(theQuery, values, (err, rows) => {
-//         if (err) {
-//             console.error("Error retrieving sprite:", err);
-//             res.status(500).send("Error retrieving sprite");
-//             return;
-//         }
-//         if (rows.length !== 1) {
-//             res.status(404).send("Valid pokes not found");
-//         } else {
-//             res.setHeader('Content-Type', 'application/json');
-//             res.status(200).json({ sprite: rows[0].sprite });
-//         }
-//     });
-// });
-
-// /**
-//  * Allows for getting a specific pokemon's name.
-//  * Example URL: http://localhost:3001/pokeName/255
-//  */
-// app.get("/pokeName/:national_id", (req, res) => {
-//     const theQuery = `
-//         SELECT * 
-//         FROM pokemon_ref 
-//         WHERE pokemon_ref.national_id = ?
-//     `;
-
-//     const values = [req.params.national_id];
-//     db.query(theQuery, values, (err, rows) => {
-//         if (err) {
-//             console.error("Error retrieving sprite:", err);
-//             res.status(500).send("Error retrieving sprite");
-//             return;
-//         }
-//         if (rows.length !== 1) {
-//             res.status(404).send("Valid pokes not found");
-//         } else {
-//             res.setHeader('Content-Type', 'application/json');
-//             res.status(200).json({ name: rows[0].name,
-//             national_id : rows[0].national_id });
-//         }
-//     });
-// });
-
-
-
-
 /**
  * Allows for getting a specific pokemon's name, sprite, icon, 
  * base stats, location, abilities, rates, and type(s).
@@ -149,15 +90,18 @@ app.get("/pokes3", (req, res) => {
  */
 app.get("/pokeData/:national_id", (req, res) => {
     const theQuery = `
-        SELECT *
-        FROM pokemon_ref
-            join pokemon_type pt on pokemon_ref.national_id = pt.national_id
-            join base_stats bs on pokemon_ref.national_id = bs.ID
-            join other_ref o on pokemon_ref.national_id = o.national_id
-            join pokemon_abilities pa on pokemon_ref.national_id = pa.national_id
-            join pokemon_location pl on pokemon_ref.national_id = pl.national_id
-            join pokemon_pics pp on pokemon_ref.national_id = pp.national_id
-        WHERE pokemon_ref.national_id = ?
+    SELECT *,
+        (select description from ability_list a1 where a1.name = pa.ability_1) as ability_1_desc,
+        (select description from ability_list a2 where a2.name = pa.ability_2) as ability_2_desc,
+        (select description from ability_list ah where ah.name = pa.hidden_ability) as ability_h_desc
+    FROM pokemon_ref
+    JOIN pokemon_type pt ON pokemon_ref.national_id = pt.national_id
+    JOIN base_stats bs ON pokemon_ref.national_id = bs.ID
+    JOIN other_ref o ON pokemon_ref.national_id = o.national_id
+    JOIN pokemon_abilities pa ON pokemon_ref.national_id = pa.national_id
+    JOIN pokemon_location pl ON pokemon_ref.national_id = pl.national_id
+    JOIN pokemon_pics pp ON pokemon_ref.national_id = pp.national_id
+    WHERE pokemon_ref.national_id = ?
     `;
 
     const values = [req.params.national_id];
@@ -171,34 +115,10 @@ app.get("/pokeData/:national_id", (req, res) => {
             res.status(404).send("Valid pokes not found");
         } else {
             res.setHeader('Content-Type', 'application/json');
-            res.status(200).json({ 
-                name: rows[0].name,
-                national_id : rows[0].national_id,
-                location : rows[0].location,
-                height : rows[0].height,
-                weight : rows[0].weight,
-                catch_rate : rows[0].catch_rate,
-                male_gender_ratio : rows[0].male_gender_ratio,
-                level_rate : rows[0].level_rate,
-                sprite : rows[0].sprite,
-                icon_1 : rows[0].icon_1,
-                icon_2 : rows[0].icon_2,
-                evolves_from : rows[0].evolves_from,
-                evolve_method : rows[0].evolve_method,
-                Attack : rows[0].Attack,
-                Defense : rows[0].Defense,
-                Speed : rows[0].Speed,
-                HP : rows[0].HP,
-                Special_Attack : rows[0].Special_Attack,
-                Special_Defense : rows[0].Special_Defense,
-                primary_type : rows[0].primary_type, 
-                secondary_type : rows[0].secondary_type,});
+            res.status(200).json( rows[0] );
         }
     });
 });
-
-
-
 
 /**
  * Endpoint for retrieving party pokemon.
@@ -231,12 +151,12 @@ app.get("/party", (req, res) => {
 app.post("/party", (req, res) => {
     const slot = req.body.slot; // Assuming the slot value is provided in the request body
     const ID = req.body.ID;     // Assuming the ID value is provided in the request body
-    
+
     if (typeof slot !== 'number' || typeof ID !== 'number' || slot < 1 || slot > 6) {
         res.status(400).send("Invalid slot or ID values");
         return;
     }
-    
+
     var theQuery = `
         INSERT INTO pokemon_party (slot, ID)
         VALUES (?, ?)
@@ -255,7 +175,7 @@ app.post("/party", (req, res) => {
             res.status(500).send("Error executing query");
             return;
         }
-        
+
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json({ message: "success" });
     });
@@ -267,7 +187,7 @@ app.post("/party", (req, res) => {
  */
 app.post("/caught", (req, res) => {
     const ID = req.body.ID;     // Assuming the ID value is provided in the request body
-    
+
     const theQuery = `
         update pokemon_caught
         SET caught = not caught
@@ -279,14 +199,39 @@ app.post("/caught", (req, res) => {
             res.status(500).send("Error executing query");
             return;
         }
-        
+
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json({ message: "Caught pokemon updated successfully" });
     });
 });
 
-// TODO: should get: evolves from, evolves into, checkboxes
-// TODO: should also get abilities and their descriptions
+/**
+ * Endpoint for retrieving party pokemon.
+ * Example URL: http://localhost:3001/party
+ */
+app.get("/evolvesinto/:national_id", (req, res) => {
+    const values = [req.params.national_id];
+    const theQuery = `
+        select pf.name, pp.sprite, er.evolve_method
+        from evolve_ref er
+        join pokemon_pics pp using (national_id)
+        join pokemon_ref pf using (national_id)
+        where er.evolves_from = ?`;
+    db.query(theQuery, values, (err, result) => {
+        if (err) {
+            console.error("Error retrieving stuff:", err);
+            res.status(500).send("Error retrieving stuff");
+            return;
+        }
+        if (result.length === 0) {
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json({ message: 'no evolutions' });
+            return;
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ poke: result });
+    });
+});
 
 // Start the server
 app.listen(port, () => {
