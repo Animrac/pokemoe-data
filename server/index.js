@@ -64,9 +64,10 @@ app.get("/pokes", (req, res) => {
  */
 app.get("/pokes3", (req, res) => {
     const theQuery = `
-        SELECT pr.name, pr.national_id, pp.icon_1
+        SELECT pr.name, pr.national_id, pp.icon_1, pc.caught
         from pokemon_ref pr
-        join pokemon_pics pp on pr.national_id = pp.national_id`;
+        join pokemon_pics pp on pr.national_id = pp.national_id
+        join pokemon_caught pc on pp.national_id = pc.national_id`;
     db.query(theQuery, (err, result) => {
         if (err) {
             console.error("Error retrieving image:", err);
@@ -257,6 +258,30 @@ app.post("/party", (req, res) => {
         
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json({ message: "success" });
+    });
+});
+
+/**
+ * Endpoint for setting caught pokemon.
+ * Example URL: http://localhost:3001/caught
+ */
+app.post("/caught", (req, res) => {
+    const ID = req.body.ID;     // Assuming the ID value is provided in the request body
+    
+    const theQuery = `
+        update pokemon_caught
+        SET caught = not caught
+        WHERE national_id = ?;
+    `;
+    db.query(theQuery, [ID], (err, result) => {
+        if (err) {
+            console.error("Error executing query:", err);
+            res.status(500).send("Error executing query");
+            return;
+        }
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ message: "Caught pokemon updated successfully" });
     });
 });
 

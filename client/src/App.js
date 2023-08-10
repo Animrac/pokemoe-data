@@ -89,6 +89,7 @@ const typeToAccentMap = {
 };
 
 const partySprite = {};
+const partySpriteBetter = [];
 const plusSign = `url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' viewBox=\'0 0 64 64\'%3E%3Cline x1=\'32\' y1=\'12\' x2=\'32\' y2=\'52\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3Cline x1=\'12\' y1=\'32\' x2=\'52\' y2=\'32\' fill=\'none\' stroke=\'%23e3e3e3\' stroke-miterlimit=\'10\' stroke-width=\'8\'/%3E%3C/svg%3E")`;
 
 function App() {
@@ -176,22 +177,22 @@ function App() {
   async function partyData(slot, nationalId) {
     const responseData = {};
     try {
-        const response = await fetch('/party', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                slot: slot,
-                ID: nationalId
-            })
-        });
-  
-        if (!response.ok) {
-            return false;
-        }
-  
-        responseData = await response.json();
+      const response = await fetch('/party', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          slot: slot,
+          ID: nationalId
+        })
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      responseData = await response.json();
     } catch (error) {
       return false;
     }
@@ -213,17 +214,60 @@ function App() {
       .then(data => {
         setData(data.poke);
         setDone(true);
+        setChecked(data.poke);
       }, 2000)
       .catch(error => {
         setError(error.message);
       });
 
-
+    partySprites();
   }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+  const setChecked = (poke) => {
+    poke.forEach(p => {
+      checkedPokemons[p.national_id] = p.caught ? true : false;
+    });
+  };
+
+  async function partySprites() {
+    try {
+      const response = await fetch(`/party`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+
+      data.poke.forEach(p => {
+        partySpriteBetter[p.slot] = `url(data:image/png;base64,${Buffer.from(p.sprite).toString('base64')})`;
+      });
+
+      if (partySpriteBetter[1]) {
+        setClicked1(!clicked1);
+      }
+      if (partySpriteBetter[2]) {
+        setClicked2(!clicked2);
+      }
+      if (partySpriteBetter[3]) {
+        setClicked3(!clicked3);
+      }
+      if (partySpriteBetter[4]) {
+        setClicked4(!clicked4);
+      }
+      if (partySpriteBetter[5]) {
+        setClicked5(!clicked5);
+      }
+      if (partySpriteBetter[6]) {
+        setClicked6(!clicked6);
+      }
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const fetchData = async (nationalId) => {
     try {
@@ -262,8 +306,6 @@ function App() {
     }
   };
 
-
-
   const filteredData = data.filter(pokemon => {
     const searchTerm = searchQuery.toLowerCase();
     return (
@@ -272,15 +314,31 @@ function App() {
     );
   });
 
-  //TODO i didn't write this yo
-  const handleCheckboxChange = (pokemonId) => {
-    setCheckedPokemons((prevChecked) => ({
-      ...prevChecked,
-      [pokemonId]: !prevChecked[pokemonId],
-    }));
+  const handleCheckboxChange = async (nationalId) => {
+    try {
+      const response = await fetch('http://localhost:3001/caught', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ID: nationalId }),
+      });
 
-    // Perform an action when a checkbox is checked
-    console.log(`Checkbox for Pokémon ID ${pokemonId} is now ${!checkedPokemons[pokemonId]}`);
+      if (response.ok) {
+        // Update the caught status in the local state
+        const updatedData = data.map((pokemon) => {
+          if (pokemon.national_id === nationalId) {
+            return { ...pokemon, caught: !pokemon.caught };
+          }
+          return pokemon;
+        });
+        setData(updatedData);
+      } else {
+        console.error('Failed to update caught status');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -394,114 +452,114 @@ function App() {
         >
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked1)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.first).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[1] ? partySpriteBetter[1] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked1) {
-                partySprite.first = partyData(1,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.first = partyData(1,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(1, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[1] = !clicked1 ? newSprite : plusSign;
               setClicked1(!clicked1);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked1) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[1] = partyData(1, -1) ? plusSign : plusSign;
+                setClicked1(!clicked1);
+              }
             }
           }}>
             {/* Content for the first cell of the grid */}
           </button>
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked2)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.second).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[2] ? partySpriteBetter[2] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked2) {
-                partySprite.second = partyData(2,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.second = partyData(2,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(2, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[2] = !clicked2 ? newSprite : plusSign;
               setClicked2(!clicked2);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked2) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[2] = partyData(2, -1) ? plusSign : plusSign;
+                setClicked2(!clicked2);
+              }
             }
           }}>
             {/* Content for the second cell of the grid */}
           </button>
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked3)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.third).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[3] ? partySpriteBetter[3] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked3) {
-                partySprite.third = partyData(3,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.third = partyData(3,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(3, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[3] = !clicked3 ? newSprite : plusSign;
               setClicked3(!clicked3);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked3) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[3] = partyData(3, -1) ? plusSign : plusSign;
+                setClicked3(!clicked3);
+              }
             }
           }}>
             {/* Content for the third cell of the grid */}
           </button>
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked4)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.fourth).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[4] ? partySpriteBetter[4] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked4) {
-                partySprite.fourth = partyData(4,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.fourth = partyData(4,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(4, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[4] = !clicked4 ? newSprite : plusSign;
               setClicked4(!clicked4);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked4) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[4] = partyData(4, -1) ? plusSign : plusSign;
+                setClicked4(!clicked4);
+              }
             }
           }}>
             {/* Content for the fourth cell of the grid */}
           </button>
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked5)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.fifth).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[5] ? partySpriteBetter[5] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked5) {
-                partySprite.fifth = partyData(5,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.fifth = partyData(5,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(5, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[5] = !clicked5 ? newSprite : plusSign;
               setClicked5(!clicked5);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked5) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[5] = partyData(5, -1) ? plusSign : plusSign;
+                setClicked5(!clicked5);
+              }
             }
           }}>
             {/* Content for the fifth cell of the grid */}
           </button>
           <button style={{
             ...partyButtonStyle,
-            backgroundImage: (clicked6)
-              ? `url(data:image/png;base64,${Buffer.from(partySprite.sixth).toString('base64')})`
-              : plusSign,
+            backgroundImage: partySpriteBetter[6] ? partySpriteBetter[6] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
-              if (!clicked6) {
-                partySprite.sixth = partyData(6,selectedPokemon.national_id) ? selectedPokemon.sprite.data : plusSign;
-              } else {
-                partySprite.sixth = partyData(6,-1) ? plusSign : plusSign;
-              }
+              const newSprite = partyData(6, selectedPokemon.national_id) ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
+              partySpriteBetter[6] = !clicked6 ? newSprite : plusSign;
               setClicked6(!clicked6);
             } else {
-              alert('No pokemon selected!');
+              if (!clicked6) {
+                alert('No pokemon selected!');
+              } else {
+                partySpriteBetter[6] = partyData(6, -1) ? plusSign : plusSign;
+                setClicked6(!clicked6);
+              }
             }
           }}>
             {/* Content for the sixth cell of the grid */}
