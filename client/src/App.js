@@ -134,7 +134,7 @@ function App() {
     border: 'none', // Remove the border
     marginBottom: '20px',
     width: '100px',
-    borderRadius: '10px',
+    borderRadius: '1vh',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M52 32L22 12V22H12V42H22V52L52 32Z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
@@ -143,7 +143,7 @@ function App() {
   const partyButtonStyle = {
     backgroundColor: 'white',
     minHeight: '100%',
-    borderRadius: '10px',
+    borderRadius: '1vh',
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -416,9 +416,9 @@ function App() {
       <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: '#EEEEEE', position: 'fixed' }}>
 
         {/* Top-Left Container */}
-        <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center', justifyContent: 'center', flexDirection: 'row', padding: '5px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', height: '10vh', textAlign: 'center', justifyContent: 'center', flexDirection: 'row', padding: '4vh 40px 4vh 40px' }}>
           <div onClick={handleLogoClick}>
-            <img src={logo} alt={`Logo`} style={{ width: '100px' }} />
+            <img src={logo} alt={`Logo`} style={{ height: '12vh' }} />
           </div>
           <div style={{ padding: '0', margin: '0 20px 0 0 ', justifyContent: 'center', width: '100%' }}>
             <h1 style={{ fontSize: '25px', margin: '0 0 0 0 ' }}>PokéMoe Data</h1>
@@ -427,7 +427,7 @@ function App() {
         </div>
 
         {/* Search Bar Container */}
-        <div style={{ padding: '0', marginLeft: '35px', marginRight: '35px' }}>
+        <div style={{ padding: '0', padding: '0 2vw 0 2vw' }}>
           <input
             type="text"
             placeholder="Search by name or national ID"
@@ -435,10 +435,10 @@ function App() {
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               width: '100%',
-              height: '40px',
+              height: '5vh',
               fontSize: '16px',
               fontWeight: 'bold',
-              borderRadius: '10px'
+              borderRadius: '1vh'
             }}
           />
         </div>
@@ -446,8 +446,8 @@ function App() {
         {!done ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
         ) : filteredData.length > 0 ? (
-          <div style={{ padding: '20px' }}>
-            <div className="scroll-container" style={{ minWidth: '100%', minHeight: '100%', maxHeight: '37vh', borderRadius: '10px' }}>
+          <div style={{ padding: '1vw' }}>
+            <div className="scroll-container" style={{ minWidth: '100%', minHeight: '100%', maxHeight: '37vh', borderRadius: '1vh' }}>
               <ul style={{ margin: 0, padding: 0 }}>
                 {filteredData.map((pokemon, index) => (
                   <li
@@ -507,8 +507,8 @@ function App() {
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             height: '30%',
-            padding: '0px 20px 0px 20px',
-            gap: '10px',
+            padding: '0px 1vw 0px 1vw',
+            gap: '1vh',
           }}
         >
           <button style={{
@@ -660,7 +660,7 @@ function App() {
             {/* Base Stat Container */}
             <div style={{
               padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row',
-              borderRadius: '10px', backgroundColor: '#eeeeee'
+              borderRadius: '1vh', backgroundColor: '#eeeeee'
             }}>
               <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                 <h2 style={{ margin: '0' }}> ATK </h2>
@@ -691,7 +691,7 @@ function App() {
             </div>
 
             {/* Other Info Container */}
-            <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
               <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
                 <h3 style={{ margin: '0', padding: '0' }}>height</h3>
@@ -719,9 +719,9 @@ function App() {
 
         {/* Name Container */}
         {selectedPokemon ? (
-          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '10px', backgroundColor: '#dedede' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '10px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '10px', marginRight: '30px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '1vh', backgroundColor: '#dedede' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '1vh' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '1vh', marginRight: '30px' }}>
                 <h1 style={{ margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
                 <h2 style={{ margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
 
@@ -759,7 +759,7 @@ function App() {
                     border: '5px solid #eeeeee',
                     width: '100px',
                     height: '100px',
-                    borderRadius: '10px',
+                    borderRadius: '1vh',
                     backgroundColor: '#eeeeee',
                     transform: 'rotateY(180deg)'
                   }}
@@ -779,7 +779,7 @@ function App() {
                     padding: 10,
                     width: '100px',
                     height: '100px',
-                    borderRadius: '10px',
+                    borderRadius: '1vh',
                     backgroundColor: '#eeeeee'
                   }}>
                   &#10148;
@@ -789,13 +789,13 @@ function App() {
             </div>
 
             {/* Location Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
             </div>
 
             {/* Ability List Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Ability List</h2>
               <ul style={{ margin: 0, paddingLeft: '50px', listStyle: 'none' }}>
                 {[
@@ -820,7 +820,7 @@ function App() {
             </div>
 
             {/* Evolves To Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px', paddingBottom: '10px' }}>Evolves to:</h2>
               {evolvesToData.length > 0 ? (
                 evolvesToData.map((evolution, index) => (
