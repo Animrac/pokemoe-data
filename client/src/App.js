@@ -86,6 +86,7 @@ const typeToAccentMap = {
   Dragon: dragon_accent
 };
 
+const baseUrl = 'https://pokemoe-server-51c05b8425e0.herokuapp.com';
 const partySpriteBetter = [];
 const plusSign = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cline x1='32' y1='12' x2='32' y2='52' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3Cline x1='12' y1='32' x2='52' y2='32' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3C/svg%3E")`;
 
@@ -177,7 +178,7 @@ function App() {
   async function partyData(slot, nationalId) {
     var responseData = {};
     try {
-      const response = await fetch('/party', {
+      const response = await fetch(baseUrl + '/party', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -204,7 +205,7 @@ function App() {
    * Gets initial information for Pokemon list and party.
    */
   useEffect(() => {
-    fetch('/pokes3')
+    fetch(baseUrl + '/pokes3')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -236,7 +237,7 @@ function App() {
    */
   async function partySprites() {
     try {
-      const response = await fetch(`/party`);
+      const response = await fetch(baseUrl + `/party`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -274,8 +275,6 @@ function App() {
     }
   };
 
-
-
   /**
    * Gets detailed information about a specified pokemon.
    * @param {int} nationalId 
@@ -283,9 +282,9 @@ function App() {
    */
   const fetchData = async (nationalId) => {
     try {
-      const response = await fetch(`/pokeData/${nationalId}`);
+      const response = await fetch(baseUrl + `/pokeData/${nationalId}`);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok.');
       }
       const data = await response.json();
       const newSelectedPokemon = data;
@@ -304,7 +303,7 @@ function App() {
    */
   const fetchEvData = async (nationalId) => {
     try {
-      const response2 = await fetch(`/evolvesinto/${nationalId}`);
+      const response2 = await fetch(baseUrl + `/evolvesinto/${nationalId}`);
       if (!response2.ok) {
         throw new Error('Network response was not ok');
       }
@@ -363,7 +362,7 @@ function App() {
    */
   const handleCheckboxChange = async (nationalId) => {
     try {
-      const response = await fetch('/caught', {
+      const response = await fetch(baseUrl + '/caught', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
