@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pokemoe-data/static/css/main.770fbbf6.css",
-    "main.js": "/pokemoe-data/static/js/main.4de4fa6b.js",
+    "main.js": "/pokemoe-data/static/js/main.1844faf0.js",
     "static/media/poke.mp3": "/pokemoe-data/static/media/poke.3c9ca09c5e0a78261e52.mp3",
     "static/media/stripesbg.jpg": "/pokemoe-data/static/media/stripesbg.d11b0d1a835f096b1724.jpg",
     "static/media/moe.png": "/pokemoe-data/static/media/moe.b79fe6c2b0081c434ac6.png",
@@ -43,10 +43,10 @@
     "static/media/selectbetter.mp3": "/pokemoe-data/static/media/selectbetter.1a4f570b24e169526a37.mp3",
     "index.html": "/pokemoe-data/index.html",
     "main.770fbbf6.css.map": "/pokemoe-data/static/css/main.770fbbf6.css.map",
-    "main.4de4fa6b.js.map": "/pokemoe-data/static/js/main.4de4fa6b.js.map"
+    "main.1844faf0.js.map": "/pokemoe-data/static/js/main.1844faf0.js.map"
   },
   "entrypoints": [
     "static/css/main.770fbbf6.css",
-    "static/js/main.4de4fa6b.js"
+    "static/js/main.1844faf0.js"
   ]
 }
