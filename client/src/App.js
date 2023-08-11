@@ -398,12 +398,12 @@ function App() {
     <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
       {/* Left Container */}
-      <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: 'rgba(205, 205, 205, 0.4)', position: 'fixed' }}>
+      <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: 'rgba(225, 225, 225, 0.4)', position: 'fixed' }}>
 
         {/* Top-Left Container */}
         <div style={{ display: 'flex', alignItems: 'center', height: '10vh', textAlign: 'center', justifyContent: 'center', flexDirection: 'row', padding: '4vh 40px 4vh 40px' }}>
           <div onClick={handleLogoClick}>
-            <img src={logo} alt={`Logo`} style={{ height: '12vh' }} />
+            <img class='logoButton' src={logo} alt={`Logo`} style={{ height: '12vh' }} />
           </div>
           <div style={{ padding: '0', margin: '0 20px 0 0 ', justifyContent: 'center', width: '100%' }}>
             <h1 style={{ fontSize: '25px', margin: '0 0 0 0 ' }}>PokéMoe Data</h1>
@@ -429,6 +429,7 @@ function App() {
           />
         </div>
 
+        {/* Pokemon List Container */}
         {!done ? (
           <div style={{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
         ) : filteredData.length > 0 ? (
@@ -454,17 +455,9 @@ function App() {
                         style={{ marginRight: '10px', marginLeft: '20px' }}
                       />
                       <button
+                        class='pokemonListItemButton'
                         key={pokemon.national_id}
                         onClick={() => handleButtonClick(pokemon.national_id)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer',
-                          padding: 0,
-                          width: '100%',
-                        }}
                       >
                         <img
                           src={`data:image/png;base64,${Buffer.from(pokemon.icon_1.data).toString('base64')}`}
@@ -632,7 +625,7 @@ function App() {
             {/* Base Stat Container */}
             <div style={{
               padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row',
-              borderRadius: '1vh', backgroundColor: '#eeeeee'
+              borderRadius: '1vh', backgroundColor: 'rgba(225, 225, 225, 0.5)'
             }}>
               <div class='tightElement' style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                 <h2 class='tightElement'> ATK </h2>
@@ -663,7 +656,7 @@ function App() {
             </div>
 
             {/* Other Info Container */}
-            <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
+            <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '1vh', backgroundColor: 'rgba(225, 225, 225, 0.5)' }}>
               <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
                 <h3 class='otherRefTitles'>height</h3>
@@ -691,7 +684,7 @@ function App() {
 
         {/* Name Container */}
         {selectedPokemon ? (
-          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '1vh', backgroundColor: 'rgba(205, 205, 205, 0.5)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '1vh', backgroundColor: 'rgba(225, 225, 225, 0.5)' }}>
             <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '1vh' }}>
               <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '1vh', marginRight: '30px' }}>
                 <h1 style={{ margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
@@ -736,13 +729,13 @@ function App() {
             </div>
 
             {/* Location Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
+            <div style='nameContainerBox'>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
             </div>
 
             {/* Ability List Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
+            <div style='nameContainerBox'>
               <h2 style={{ margin: '0px' }}>Ability List</h2>
               <ul style={{ margin: 0, paddingLeft: '50px', listStyle: 'none' }}>
                 {[
@@ -767,7 +760,7 @@ function App() {
             </div>
 
             {/* Evolves To Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
+            <div name='nameContainerBox'>
               <h2 style={{ margin: '0px', paddingBottom: '10px' }}>Evolves to:</h2>
               {evolvesToData.length > 0 ? (
                 evolvesToData.map((evolution, index) => (
