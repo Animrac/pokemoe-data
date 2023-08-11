@@ -5,7 +5,6 @@ import logo from './moe.png';
 import PreLoader1 from "./components/PreLoader1";
 import selectSound from './selectbetter.mp3';
 import entrySound from './poke.mp3';
-// import entrySound from './start.mp3';
 
 import normal from './type_NORMAL.png';
 import fire from './type_FIRE.png';
@@ -117,40 +116,6 @@ function App() {
   const spriteDimensions = 250;
   const maxBaseValue = 255; // Maximum values for each base stat
 
-// Define the keyframes for the animation
-const keyframes = `
-  @keyframes animatedBackground {
-    from {
-      background-position: 0 0;
-    }
-    to {
-      background-position: -10000px 0;
-    }
-}`;
-// Add the keyframes to the global style
-const GlobalStyle = () => (
-  <style>
-    {keyframes}
-  </style>
-);
-  /**
-  * Animates an infinite looping background.
-  * @returns Style for the background.
-  */
-  const divStyles = {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    backgroundImage: 'url("https://www.toptal.com/designers/subtlepatterns/uploads/what-the-hex.png")',
-    backgroundRepeat: 'repeat',
-    backgroundPosition: '0 0',
-    backgroundSize: 'auto 100%',
-  /*adjust s value for speed*/
-    animation: 'animatedBackground 500s linear infinite'
-  };
-
   /**
    * Set Base Stat bars of selected pokemon.
    * @param {JSON} selectedPokemon 
@@ -165,22 +130,9 @@ const GlobalStyle = () => (
   };
 
   /**
-   * Styling for the party buttons you can add selected pokemon to.
+   * Credits.
    */
-  const partyButtonStyle = {
-    backgroundColor: 'white',
-    minHeight: '100%',
-    borderRadius: '1vh',
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: '5px solid #ffffff',
-  };
-
   const credits = 'Thank you for checking out PokéMoe Data! :D <3\n\nCreated by Carmina Cruz, James Deal, and Devin Hanson.\n\nSprites and Icons drawn by members of the Moemon Fire Red Revival Project Community.\n\nLogo illustrated by Carmina Cruz.\n\n© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc. Pokémon, Pokémon character names, and sounds are trademarks of Nintendo.';
-
 
   /**
    * Fetches data from server about specific pokemon, and plays sound when executed.
@@ -471,6 +423,7 @@ const GlobalStyle = () => (
               height: '5vh',
               fontSize: '16px',
               fontWeight: 'bold',
+              border: '1px solid white',
               borderRadius: '1vh'
             }}
           />
@@ -481,7 +434,7 @@ const GlobalStyle = () => (
         ) : filteredData.length > 0 ? (
           <div style={{ padding: '1vw' }}>
             <div className="scroll-container" style={{ minWidth: '100%', minHeight: '100%', maxHeight: '37vh', borderRadius: '1vh' }}>
-              <ul style={{ margin: 0, padding: 0 }}>
+              <ul class='tightElement'>
                 {filteredData.map((pokemon, index) => (
                   <li
                     key={pokemon.national_id}
@@ -544,8 +497,7 @@ const GlobalStyle = () => (
             gap: '1vh',
           }}
         >
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[1] ? partySpriteBetter[1] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -564,8 +516,7 @@ const GlobalStyle = () => (
           }}>
             {/* Content for the first cell of the grid */}
           </button>
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[2] ? partySpriteBetter[2] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -584,8 +535,7 @@ const GlobalStyle = () => (
           }}>
             {/* Content for the second cell of the grid */}
           </button>
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[3] ? partySpriteBetter[3] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -604,8 +554,7 @@ const GlobalStyle = () => (
           }}>
             {/* Content for the third cell of the grid */}
           </button>
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[4] ? partySpriteBetter[4] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -624,8 +573,7 @@ const GlobalStyle = () => (
           }}>
             {/* Content for the fourth cell of the grid */}
           </button>
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[5] ? partySpriteBetter[5] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -644,8 +592,7 @@ const GlobalStyle = () => (
           }}>
             {/* Content for the fifth cell of the grid */}
           </button>
-          <button style={{
-            ...partyButtonStyle,
+          <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[6] ? partySpriteBetter[6] : plusSign,
           }} onClick={() => {
             if (selectedPokemon != null) {
@@ -670,19 +617,7 @@ const GlobalStyle = () => (
       </div>
 
       {/* Middle Container */}
-      <GlobalStyle />
-      <div
-        class="stripes-animated-bg"
-        style={{
-          // divStyles,
-          // display: 'flex', // Use flex display to arrange items side by side
-          // width: '100%',
-          // textAlign: 'left',
-          // padding: '0px 0px 0px 24vw',
-          // backgroundImage: `url(${require("./stripesbg.gif")})`,
-          // backgroundAttachment: 'fixed',
-          // backgroundRepeat: 'repeat'
-        }}>
+      <div class="stripes-animated-bg">
         {/* Sprite Image */}
         {selectedPokemon ? (
           <div style={{ padding: '30px', display: 'flex', flexDirection: 'column' }}>
@@ -699,31 +634,31 @@ const GlobalStyle = () => (
               padding: '10px', marginBottom: '20px', display: 'flex', flexDirection: 'row',
               borderRadius: '1vh', backgroundColor: '#eeeeee'
             }}>
-              <div style={{ margin: '0', padding: '0', display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                <h2 style={{ margin: '0' }}> ATK </h2>
-                <h2 style={{ margin: '0' }}> DEF </h2>
-                <h2 style={{ margin: '0' }}> SP. ATK </h2>
-                <h2 style={{ margin: '0' }}> SP. DEF </h2>
-                <h2 style={{ margin: '0' }}> HP </h2>
-                <h2 style={{ margin: '0' }}> SPD </h2>
+              <div class='tightElement' style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <h2 class='tightElement'> ATK </h2>
+                <h2 class='tightElement'> DEF </h2>
+                <h2 class='tightElement'> SP. ATK </h2>
+                <h2 class='tightElement'> SP. DEF </h2>
+                <h2 class='tightElement'> HP </h2>
+                <h2 class='tightElement'> SPD </h2>
               </div>
 
               <div style={{ flex: 1, alignItems: 'right', textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: `${atkBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'DarkGray' }}></div>
-                <div style={{ width: `${defBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'SteelBlue' }}></div>
-                <div style={{ width: `${spAtkBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'Goldenrod' }}></div>
-                <div style={{ width: `${spDefBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'MediumPurple' }}></div>
-                <div style={{ width: `${hpBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'LightCoral' }}></div>
-                <div style={{ width: `${speedBarWidth}%`, maxWidth: '90px', height: '10px', margin: '11px', alignSelf: 'flex-end', backgroundColor: 'YellowGreen' }}></div>
+                <div class='statBar' style={{ width: `${atkBarWidth}%`, backgroundColor: 'DarkGray' }}></div>
+                <div class='statBar' style={{ width: `${defBarWidth}%`, backgroundColor: 'SteelBlue' }}></div>
+                <div class='statBar' style={{ width: `${spAtkBarWidth}%`, backgroundColor: 'Goldenrod' }}></div>
+                <div class='statBar' style={{ width: `${spDefBarWidth}%`, backgroundColor: 'MediumPurple' }}></div>
+                <div class='statBar' style={{ width: `${hpBarWidth}%`, backgroundColor: 'LightCoral' }}></div>
+                <div class='statBar' style={{ width: `${speedBarWidth}%`, backgroundColor: 'YellowGreen' }}></div>
               </div>
 
               <div style={{ margin: '0', padding: '0', minWidth: '35px', display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Attack}</div>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Defense}</div>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Attack}</div>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Special_Defense}</div>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.HP}</div>
-                <div style={{ flex: 1, textAlign: 'right', fontSize: '22px' }}>{selectedPokemon.Speed}</div>
+                <div class='statNumber'>{selectedPokemon.Attack}</div>
+                <div class='statNumber'>{selectedPokemon.Defense}</div>
+                <div class='statNumber'>{selectedPokemon.Special_Attack}</div>
+                <div class='statNumber'>{selectedPokemon.Special_Defense}</div>
+                <div class='statNumber'>{selectedPokemon.HP}</div>
+                <div class='statNumber'>{selectedPokemon.Speed}</div>
               </div>
             </div>
 
@@ -731,22 +666,22 @@ const GlobalStyle = () => (
             <div style={{ padding: '5px', display: 'flex', flexDirection: 'row', justifyContent: 'center', borderRadius: '1vh', backgroundColor: '#eeeeee' }}>
               <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
-                <h3 style={{ margin: '0', padding: '0' }}>height</h3>
-                <p style={{ margin: '0' }}>{selectedPokemon.height} m</p>
+                <h3 class='otherRefTitles'>height</h3>
+                <p class='tightElement'>{selectedPokemon.height} m</p>
 
-                <div><h3 style={{ margin: '0', padding: '0' }}>male</h3> {selectedPokemon.male_gender_ratio} %</div>
+                <div><h3 class='otherRefTitles'>male</h3> {selectedPokemon.male_gender_ratio} %</div>
 
-                <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>catch rate</h3> {selectedPokemon.catch_rate} %
+                <h3 class='otherRefTitles'>catch rate</h3> {selectedPokemon.catch_rate} %
 
               </div>
               <div style={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', minWidth: '100px' }}>
 
-                <h3 style={{ margin: '0', padding: '0' }}>weight</h3>
-                <p style={{ margin: '0' }}>{selectedPokemon.weight} kg</p>
+                <h3 class='otherRefTitles'>weight</h3>
+                <p class='tightElement'>{selectedPokemon.weight} kg</p>
 
-                <div><h3 style={{ margin: '0', padding: '0' }}>female</h3> {(100.00 - selectedPokemon.male_gender_ratio).toFixed(2)} %</div>
+                <div><h3 class='otherRefTitles'>female</h3> {(100.00 - selectedPokemon.male_gender_ratio).toFixed(2)} %</div>
 
-                <h3 style={{ margin: '0', padding: '0', marginTop: '5px' }}>level rate</h3> {selectedPokemon.level_rate}
+                <h3 class='otherRefTitles'>level rate</h3> {selectedPokemon.level_rate}
 
               </div>
             </div>
@@ -785,40 +720,15 @@ const GlobalStyle = () => (
               {/* arrow buttons to go to the next/previous pokemon by national ID */}
               <div style={{ flex: '1', textAlign: 'right' }}>
                 <button
+                  class='arrowButton'
                   onClick={() => selectedPokemon.national_id > 252 ? handleButtonClick(selectedPokemon.national_id - 1) : alert('No Pokemon to the left!')}
-                  style={{
-                    alignItems: 'center',
-                    margin: '10px',
-                    fontSize: '50px',
-                    background: 'none',
-                    cursor: 'pointer',
-                    padding: 10,
-                    border: '5px solid #eeeeee',
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '1vh',
-                    backgroundColor: '#eeeeee',
-                    transform: 'rotateY(180deg)'
-                  }}
                 >
-                  {/* colors already seemed good */}
-                  <div style={{ color: '#000000' }}>&#10148;</div>
+                  <div style={{ transform: 'rotateY(180deg)' }}>&#10148;</div>
                 </button>
                 <button
+                  class='arrowButton'
                   onClick={() => selectedPokemon.national_id < 386 ? handleButtonClick(selectedPokemon.national_id + 1) : alert('No Pokemon to the right!')}
-                  style={{
-                    alignItems: 'center',
-                    margin: '10px',
-                    fontSize: '50px',
-                    background: 'none',
-                    cursor: 'pointer',
-                    border: '5px solid #eeeeee',
-                    padding: 10,
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '1vh',
-                    backgroundColor: '#eeeeee'
-                  }}>
+                >
                   &#10148;
                 </button>
               </div>
@@ -867,7 +777,7 @@ const GlobalStyle = () => (
                       style={{ width: '100px', height: '100px', marginRight: '10px' }} />
                     <div>
                       <p style={{ fontSize: '25px', margin: '0' }}>{evolution.name}</p>
-                      <p style={{ margin: '0' }}>{evolution.evolve_method}</p>
+                      <p class='tightElement'>{evolution.evolve_method}</p>
                     </div>
                   </div>
                 ))

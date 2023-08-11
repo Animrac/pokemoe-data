@@ -1,14 +1,57 @@
-.App {
-  text-align: center;
-}
-
-/* .base-stats {
-  padding: 10px;
-  margin: 0;
-  margin-right: 30px;
+/* To change the font of the website */
+/* body, html { 
+  font-family: 'Comic Sans', cursive;
 } */
 
-/* BackgroundSlider.css */
+.partyButton {
+  background-Color: white;
+  min-Height: 100%;
+  border-Radius: 1vh;
+  background-Size: contain;
+  background-Repeat: no-repeat;
+  background-Position: center;
+  justify-Content: center;
+  align-Items: center;
+  border: 5px solid #ffffff;
+}
+
+.arrowButton {
+  align-items: center;
+  margin: 10px;
+  font-size: 50px;
+  background: none;
+  cursor: pointer;
+  padding: 10;
+  border: 5px solid #eeeeee;
+  width: 100px;
+  height: 100px;
+  border-radius: 1vh;
+  background-color: #eeeeee;
+}
+
+.otherRefTitles {
+  padding: 0;
+  margin: 0;
+  margin-top: 5px;
+}
+
+.tightElement {
+  padding: 0;
+  margin: 0;
+}
+
+.statBar {
+  max-width: 90px;
+  height: 10px;
+  margin: 11px;
+  align-self: flex-end;
+}
+
+.statNumber {
+  flex: 1;
+  text-align: right;
+  font-size: 22px;
+}
 
 .stripes-animated-bg {
   display: flex;
@@ -16,44 +59,11 @@
   text-align: left;
   padding: 0px 0px 0px 24vw;
   background: url("stripesbg.jpg") repeat 0 0;
-  animation: slide 30s infinite linear;
+  animation: slide 80s infinite linear;
 }
 
 @keyframes slide {
   100% {
     background-position: 0 1920px;
-  }
-}
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
