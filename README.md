@@ -1,6 +1,6 @@
-<p style="text-align:center;"><img src="https://github.com/Animrac/pokemoe-data/blob/main/client/src/moe.png?raw=true" alt="Confusion" width=200></p>
+<p align="center"><img src="https://github.com/Animrac/pokemoe-data/blob/main/client/src/moe.png?raw=true" alt="Confusion" width=200></p>
 
-# pokemoe-data
+# PokéMoe Data
 A Pokedex which allows users to create a party of pokemon and track what they have caught. It is coded in JavaScript, using React and Node, with a MySQL database.
 
 # Local Install instructions
