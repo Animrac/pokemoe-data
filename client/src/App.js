@@ -729,13 +729,13 @@ function App() {
             </div>
 
             {/* Location Container */}
-            <div style='nameContainerBox'>
+            <div class='nameContainerBox'>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
             </div>
 
             {/* Ability List Container */}
-            <div style='nameContainerBox'>
+            <div class='nameContainerBox'>
               <h2 style={{ margin: '0px' }}>Ability List</h2>
               <ul style={{ margin: 0, paddingLeft: '50px', listStyle: 'none' }}>
                 {[
@@ -760,7 +760,7 @@ function App() {
             </div>
 
             {/* Evolves To Container */}
-            <div name='nameContainerBox'>
+            <div class='nameContainerBox'>
               <h2 style={{ margin: '0px', paddingBottom: '10px' }}>Evolves to:</h2>
               {evolvesToData.length > 0 ? (
                 evolvesToData.map((evolution, index) => (
