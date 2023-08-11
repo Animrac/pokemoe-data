@@ -86,6 +86,7 @@ const typeToAccentMap = {
   Dragon: dragon_accent
 };
 
+const burl = 'https://pokemoe-server-51c05b8425e0.herokuapp.com';
 const partySpriteBetter = [];
 const plusSign = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cline x1='32' y1='12' x2='32' y2='52' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3Cline x1='12' y1='32' x2='52' y2='32' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3C/svg%3E")`;
 
@@ -177,7 +178,7 @@ function App() {
   async function partyData(slot, nationalId) {
     var responseData = {};
     try {
-      const response = await fetch('/party', {
+      const response = await fetch(burl + '/party', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -204,7 +205,7 @@ function App() {
    * Gets initial information for Pokemon list and party.
    */
   useEffect(() => {
-    fetch('/pokes3')
+    fetch(burl + '/pokes3')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -236,7 +237,7 @@ function App() {
    */
   async function partySprites() {
     try {
-      const response = await fetch(`/party`);
+      const response = await fetch(burl + `/party`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -283,7 +284,7 @@ function App() {
    */
   const fetchData = async (nationalId) => {
     try {
-      const response = await fetch(`/pokeData/${nationalId}`);
+      const response = await fetch(burl + `/pokeData/${nationalId}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -304,7 +305,7 @@ function App() {
    */
   const fetchEvData = async (nationalId) => {
     try {
-      const response2 = await fetch(`/evolvesinto/${nationalId}`);
+      const response2 = await fetch(burl + `/evolvesinto/${nationalId}`);
       if (!response2.ok) {
         throw new Error('Network response was not ok');
       }
@@ -363,7 +364,7 @@ function App() {
    */
   const handleCheckboxChange = async (nationalId) => {
     try {
-      const response = await fetch('/caught', {
+      const response = await fetch(burl + '/caught', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -493,7 +494,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[1] ? partySpriteBetter[1] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked1) {
               const newSprite = partyData(1, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[1] = !clicked1 ? newSprite : plusSign;
@@ -512,7 +513,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[2] ? partySpriteBetter[2] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked2) {
               const newSprite = partyData(2, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[2] = !clicked2 ? newSprite : plusSign;
@@ -531,7 +532,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[3] ? partySpriteBetter[3] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked3) {
               const newSprite = partyData(3, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[3] = !clicked3 ? newSprite : plusSign;
@@ -550,7 +551,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[4] ? partySpriteBetter[4] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked4) {
               const newSprite = partyData(4, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[4] = !clicked4 ? newSprite : plusSign;
@@ -569,7 +570,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[5] ? partySpriteBetter[5] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked5) {
               const newSprite = partyData(5, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[5] = !clicked5 ? newSprite : plusSign;
@@ -588,7 +589,7 @@ function App() {
           <button class='partyButton' style={{
             backgroundImage: partySpriteBetter[6] ? partySpriteBetter[6] : plusSign,
           }} onClick={() => {
-            if (selectedPokemon != null) {
+            if (selectedPokemon != null && !clicked6) {
               const newSprite = partyData(6, selectedPokemon.national_id)
                 ? `url(data:image/png;base64,${Buffer.from(selectedPokemon.sprite.data).toString('base64')})` : plusSign;
               partySpriteBetter[6] = !clicked6 ? newSprite : plusSign;
