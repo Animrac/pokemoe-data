@@ -44,6 +44,12 @@ import steel_accent from './steel_accent.png';
 import fairy_accent from './fairy_accent.png';
 import dragon_accent from './dragon_accent.png';
 
+/**
+ * Swap these lines out to run local or remote for backend and DB.
+ */
+// const burl = 'http://localhost:3001';
+const burl = 'https://pokemoe-server-51c05b8425e0.herokuapp.com';
+
 const typeToImageMap = {
   Normal: normal,
   Fire: fire,
@@ -86,7 +92,6 @@ const typeToAccentMap = {
   Dragon: dragon_accent
 };
 
-const burl = 'https://pokemoe-server-51c05b8425e0.herokuapp.com';
 const partySpriteBetter = [];
 const plusSign = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cline x1='32' y1='12' x2='32' y2='52' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3Cline x1='12' y1='32' x2='52' y2='32' fill='none' stroke='%23e3e3e3' stroke-miterlimit='10' stroke-width='8'/%3E%3C/svg%3E")`;
 
