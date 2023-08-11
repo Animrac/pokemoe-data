@@ -1,6 +1,7 @@
 /* To change the font of the website */
 /* body, html { 
-  font-family: 'Comic Sans', cursive;
+  font-family: Comic Sans;
+cursive;
 } */
 
 .partyButton {
@@ -22,11 +23,18 @@
   background: none;
   cursor: pointer;
   padding: 10;
-  border: 5px solid #eeeeee;
+  border: 5px solid #ffffff;
   width: 100px;
   height: 100px;
   border-radius: 1vh;
-  background-color: #eeeeee;
+  background-color: #ffffff;
+  color: #8d8d8d;
+}
+
+.arrowButton:hover {
+  color: #000000;
+  background-color: #bebebe;
+  border: 5px solid #bebebe;
 }
 
 .otherRefTitles {
@@ -59,11 +67,41 @@
   text-align: left;
   padding: 0px 0px 0px 24vw;
   background: url("stripesbg.jpg") repeat 0 0;
-  animation: slide 80s infinite linear;
+  animation: slide 75s infinite linear;
 }
 
 @keyframes slide {
   100% {
     background-position: 0 1920px;
   }
+}
+
+.logoButton:hover {
+  background-Color: rgb(78, 127, 201);
+  border-radius: 1vh;
+}
+
+.nameContainerBox {
+  display: flex;
+  flex-Direction: column;
+  margin-Bottom: 20px;
+  padding: 10px 30px 10px 10px;
+  border-Radius: 1vh;
+  background-Color: #ffffff
+}
+
+.pokemonListItemButton {
+  display: flex;
+  align-Items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+}
+
+
+.pokemonListItemButton:hover {
+  /* text-decoration: underline; */
+  color: #7a7a7a;
 }
