@@ -3,7 +3,8 @@ import { Buffer } from 'buffer';
 import logo from './moe.png';
 import PreLoader1 from "./components/PreLoader1";
 import selectSound from './selectbetter.mp3';
-import entrySound from './start.mp3';
+import entrySound from './poke.mp3';
+// import entrySound from './start.mp3';
 
 import normal from './type_NORMAL.png';
 import fire from './type_FIRE.png';
@@ -102,6 +103,8 @@ function App() {
   const [clicked5, setClicked5] = useState(false);
   const [clicked6, setClicked6] = useState(false);
   const [evolvesToData, setEvolvesToData] = useState([]);
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const [atkBarWidth, setAtkBarWidth] = useState(0);
   const [defBarWidth, setDefBarWidth] = useState(0);
@@ -139,12 +142,11 @@ function App() {
 
   const partyButtonStyle = {
     backgroundColor: 'white',
-    height: '100px',
+    minHeight: '100%',
     borderRadius: '10px',
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     border: '5px solid #ffffff',
@@ -166,8 +168,21 @@ function App() {
    * Easter egg.
    */
   const handleLogoClick = async () => {
-    const audio = new Audio(entrySound);
-    audio.play();
+    if (audio) {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      setIsPlaying(!isPlaying);
+    } else {
+      const newAudio = new Audio(entrySound);
+      newAudio.loop = true;
+      newAudio.play();
+      setAudio(newAudio);
+      setIsPlaying(true);
+      alert('Thank you for checking out PokéMoe Data! :D <3\n\nCreated by: Carmina Cruz, James Deal, and Devin Hanson\n');
+    }
   };
 
   /**
@@ -398,17 +413,16 @@ function App() {
     <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
       {/* Left Container */}
-      <div className="left-container" style={{ width: '470px', textAlign: 'center', backgroundColor: '#EEEEEE' }}>
+      <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: '#EEEEEE', position: 'fixed' }}>
 
         {/* Top-Left Container */}
-        <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center', justifyContent: 'center', flexDirection: 'row', padding: '5px' }}>
           <div onClick={handleLogoClick}>
-            <img src={logo} alt={`Logo`} style={{ width: '120px' }} />
+            <img src={logo} alt={`Logo`} style={{ width: '100px' }} />
           </div>
-          <div style={{ padding: '0', margin: '0' }}>
-            <h1 style={{ fontSize: '25px', margin: '0', marginLeft: '10px' }}>PokéMoe Data</h1>
+          <div style={{ padding: '0', margin: '0 20px 0 0 ', justifyContent: 'center', width: '100%' }}>
+            <h1 style={{ fontSize: '25px', margin: '0 0 0 0 ' }}>PokéMoe Data</h1>
             Gotta woo 'em all &lt;3<br />
-            nvm
           </div>
         </div>
 
@@ -433,7 +447,7 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'center' }}><PreLoader1 /></div>
         ) : filteredData.length > 0 ? (
           <div style={{ padding: '20px' }}>
-            <div className="scroll-container" style={{ maxHeight: '250px', minHeight: '250px', borderRadius: '10px' }}>
+            <div className="scroll-container" style={{ minWidth: '100%', minHeight: '100%', maxHeight: '37vh', borderRadius: '10px' }}>
               <ul style={{ margin: 0, padding: 0 }}>
                 {filteredData.map((pokemon, index) => (
                   <li
@@ -487,14 +501,13 @@ function App() {
           <p style={{ minHeight: '218px', fontWeight: 'bold', color: 'red' }}>No matching Pokémon found.</p>
         )}
 
-        {/* Grid */}
+        {/* Party Pokemon Grid Container */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            padding: '20px',
-            paddingTop: '0',
-            paddingBottom: '0',
+            height: '30%',
+            padding: '0px 20px 0px 20px',
             gap: '10px',
           }}
         >
@@ -629,8 +642,9 @@ function App() {
           display: 'flex', // Use flex display to arrange items side by side
           width: '100%',
           textAlign: 'left',
-          padding: '20px',
-          backgroundImage: `url(${require("./stripesbg.jpg")})`
+          padding: '0px 0px 0px 24vw',
+          backgroundImage: `url(${require("./stripesbg.jpg")})`,
+          backgroundRepeat: 'repeat'
         }}>
         {/* Sprite Image */}
         {selectedPokemon ? (
@@ -712,7 +726,7 @@ function App() {
                 <h2 style={{ margin: '0', padding: '0' }}>#{selectedPokemon.national_id}</h2>
 
                 {/* Type Container */}
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', margin: '0px 5px 5px 0px' }}>
                   <img
                     style={{ marginRight: '5px', width: '100px' }}
                     src={typeToImageMap[selectedPokemon.primary_type]}
@@ -731,6 +745,7 @@ function App() {
                 </div>
               </div>
 
+              {/* arrow buttons to go to the next/previous pokemon by national ID */}
               <div style={{ flex: '1', textAlign: 'right' }}>
                 <button
                   onClick={() => selectedPokemon.national_id > 252 ? handleButtonClick(selectedPokemon.national_id - 1) : alert('No Pokemon to the left!')}
@@ -774,13 +789,13 @@ function App() {
             </div>
 
             {/* Location Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Location Description</h2>
               {selectedPokemon.location}<br />
             </div>
 
             {/* Ability List Container */}
-            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px', padding: '10px 30px 10px 10px', borderRadius: '10px', backgroundColor: '#eeeeee' }}>
               <h2 style={{ margin: '0px' }}>Ability List</h2>
               <ul style={{ margin: 0, paddingLeft: '50px', listStyle: 'none' }}>
                 {[
@@ -793,7 +808,7 @@ function App() {
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <h3 style={{ padding: 0, margin: '5px 0' }}>
                           {entry.ability === selectedPokemon.hidden_ability
-                            ? <span style={{ color: 'grey' }}>{entry.ability}</span>
+                            ? <span style={{ flexDirection: 'column' }}><span>{entry.ability}</span><span style={{ color: 'grey', marginLeft: '10px', fontSize: '15px' }}>(Hidden Ability)</span></span>
                             : entry.ability}
                         </h3>
                         <p style={{ padding: 0, margin: 0, paddingLeft: '20px' }}>{entry.description}</p>
@@ -825,22 +840,25 @@ function App() {
             </div>
 
           </div>
+
+
         ) : null}
+
+        {/* Right Container */}
+        <div style={{ display: 'flex', width: '150px' }}>
+          {selectedPokemon ? (
+            <div>
+              <img
+                src={typeToAccentMap[selectedPokemon.primary_type]}
+                alt={`${selectedPokemon.primary_type} Accent`}
+                style={{  filter: 'opacity(50%)', maxHeight: '100vh', position: 'fixed', backgroundRepeat: 'repeat' }}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
 
-      {/* Right Container */}
-      <div style={{ display: 'flex', width: '150px' }}>
-        {/* This part contains the content */}
-        {selectedPokemon ? (
-          <div>
-            <img
-              src={typeToAccentMap[selectedPokemon.primary_type]}
-              alt={`${selectedPokemon.primary_type} Accent`}
-              style={{ maxWidth: '100%', height: '100%', filter: 'opacity(50%)' }}
-            />
-          </div>
-        ) : null}
-      </div>
+
     </div>
   );
 
