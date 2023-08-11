@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import { Buffer } from 'buffer';
 import logo from './moe.png';
 import PreLoader1 from "./components/PreLoader1";
@@ -116,6 +117,40 @@ function App() {
   const spriteDimensions = 250;
   const maxBaseValue = 255; // Maximum values for each base stat
 
+// Define the keyframes for the animation
+const keyframes = `
+  @keyframes animatedBackground {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -10000px 0;
+    }
+}`;
+// Add the keyframes to the global style
+const GlobalStyle = () => (
+  <style>
+    {keyframes}
+  </style>
+);
+  /**
+  * Animates an infinite looping background.
+  * @returns Style for the background.
+  */
+  const divStyles = {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    backgroundImage: 'url("https://www.toptal.com/designers/subtlepatterns/uploads/what-the-hex.png")',
+    backgroundRepeat: 'repeat',
+    backgroundPosition: '0 0',
+    backgroundSize: 'auto 100%',
+  /*adjust s value for speed*/
+    animation: 'animatedBackground 500s linear infinite'
+  };
+
   /**
    * Set Base Stat bars of selected pokemon.
    * @param {JSON} selectedPokemon 
@@ -129,6 +164,9 @@ function App() {
     setSpeedBarWidth((selectedPokemon.Speed / maxBaseValue) * 100);
   };
 
+  /**
+   * Styling for the party buttons you can add selected pokemon to.
+   */
   const partyButtonStyle = {
     backgroundColor: 'white',
     minHeight: '100%',
@@ -140,6 +178,8 @@ function App() {
     alignItems: 'center',
     border: '5px solid #ffffff',
   };
+
+  const credits = 'Thank you for checking out PokéMoe Data! :D <3\n\nCreated by Carmina Cruz, James Deal, and Devin Hanson.\n\nSprites and Icons drawn by members of the Moemon Fire Red Revival Project Community.\n\nLogo illustrated by Carmina Cruz.\n\n© 2023 Pokémon. © 1995-2023 Nintendo/Creatures Inc./GAME FREAK inc. Pokémon, Pokémon character names, and sounds are trademarks of Nintendo.';
 
 
   /**
@@ -162,6 +202,7 @@ function App() {
         audio.pause();
       } else {
         audio.play();
+        alert(credits);
       }
       setIsPlaying(!isPlaying);
     } else {
@@ -170,7 +211,8 @@ function App() {
       newAudio.play();
       setAudio(newAudio);
       setIsPlaying(true);
-      alert('Thank you for checking out PokéMoe Data! :D <3\n\nCreated by: Carmina Cruz, James Deal, and Devin Hanson\n');
+      alert(credits);
+
     }
   };
 
@@ -279,6 +321,8 @@ function App() {
       console.error('Error fetching data:', error);
     }
   };
+
+
 
   /**
    * Gets detailed information about a specified pokemon.
@@ -402,7 +446,7 @@ function App() {
     <div className="App" style={{ display: 'flex', minHeight: '100vh', overflow: 'hidden' }}>
 
       {/* Left Container */}
-      <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: '#EEEEEE', position: 'fixed' }}>
+      <div className="left-container" style={{ width: '24vw', height: '100vh', textAlign: 'center', backgroundColor: 'rgba(205, 205, 205, 0.4)', position: 'fixed' }}>
 
         {/* Top-Left Container */}
         <div style={{ display: 'flex', alignItems: 'center', height: '10vh', textAlign: 'center', justifyContent: 'center', flexDirection: 'row', padding: '4vh 40px 4vh 40px' }}>
@@ -626,14 +670,18 @@ function App() {
       </div>
 
       {/* Middle Container */}
+      <GlobalStyle />
       <div
+        class="stripes-animated-bg"
         style={{
-          display: 'flex', // Use flex display to arrange items side by side
-          width: '100%',
-          textAlign: 'left',
-          padding: '0px 0px 0px 24vw',
-          backgroundImage: `url(${require("./stripesbg.jpg")})`,
-          backgroundRepeat: 'repeat'
+          // divStyles,
+          // display: 'flex', // Use flex display to arrange items side by side
+          // width: '100%',
+          // textAlign: 'left',
+          // padding: '0px 0px 0px 24vw',
+          // backgroundImage: `url(${require("./stripesbg.gif")})`,
+          // backgroundAttachment: 'fixed',
+          // backgroundRepeat: 'repeat'
         }}>
         {/* Sprite Image */}
         {selectedPokemon ? (
@@ -708,7 +756,7 @@ function App() {
 
         {/* Name Container */}
         {selectedPokemon ? (
-          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '1vh', backgroundColor: '#dedede' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: '1', padding: '20px', margin: '20px 30px 20px 0', borderRadius: '1vh', backgroundColor: 'rgba(205, 205, 205, 0.5)' }}>
             <div style={{ display: 'flex', flexDirection: 'row', borderRadius: '1vh' }}>
               <div style={{ display: 'flex', flexDirection: 'column', borderRadius: '1vh', marginRight: '30px' }}>
                 <h1 style={{ margin: '0', padding: '0' }}>{selectedPokemon.name}</h1>
@@ -834,13 +882,13 @@ function App() {
         ) : null}
 
         {/* Right Container */}
-        <div style={{ display: 'flex', width: '150px' }}>
+        <div style={{ display: 'flex', width: '10vw', height: '100vh' }}>
           {selectedPokemon ? (
             <div>
               <img
                 src={typeToAccentMap[selectedPokemon.primary_type]}
                 alt={`${selectedPokemon.primary_type} Accent`}
-                style={{  filter: 'opacity(50%)', maxHeight: '100vh', position: 'fixed', backgroundRepeat: 'repeat' }}
+                style={{ minHeight: '100%', position: 'fixed', backgroundRepeat: 'repeat' }}
               />
             </div>
           ) : null}

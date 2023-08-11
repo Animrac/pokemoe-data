@@ -8,6 +8,22 @@
   margin-right: 30px;
 } */
 
+/* BackgroundSlider.css */
+
+.stripes-animated-bg {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  padding: 0px 0px 0px 24vw;
+  background: url("stripesbg.jpg") repeat 0 0;
+  animation: slide 30s infinite linear;
+}
+
+@keyframes slide {
+  100% {
+    background-position: 0 1920px;
+  }
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
