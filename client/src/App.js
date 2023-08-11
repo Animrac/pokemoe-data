@@ -129,17 +129,6 @@ function App() {
     setSpeedBarWidth((selectedPokemon.Speed / maxBaseValue) * 100);
   };
 
-  const arrowButtonStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0)',
-    border: 'none', // Remove the border
-    marginBottom: '20px',
-    width: '100px',
-    borderRadius: '1vh',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M52 32L22 12V22H12V42H22V52L52 32Z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
-  };
-
   const partyButtonStyle = {
     backgroundColor: 'white',
     minHeight: '100%',
