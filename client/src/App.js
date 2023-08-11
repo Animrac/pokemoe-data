@@ -721,13 +721,13 @@ function App() {
               <div style={{ flex: '1', textAlign: 'right' }}>
                 <button
                   class='arrowButton'
-                  onClick={() => selectedPokemon.national_id > 252 ? handleButtonClick(selectedPokemon.national_id - 1) : alert('No Pokemon to the left!')}
+                  onClick={() => (selectedPokemon.national_id > 252) ? handleButtonClick(selectedPokemon.national_id - 1) : alert('No Pokemon to the left!')}
                 >
                   <div style={{ transform: 'rotateY(180deg)' }}>&#10148;</div>
                 </button>
                 <button
                   class='arrowButton'
-                  onClick={() => selectedPokemon.national_id < 386 ? handleButtonClick(selectedPokemon.national_id + 1) : alert('No Pokemon to the right!')}
+                  onClick={() => (selectedPokemon.national_id < 386 && selectedPokemon.national_id != 143) ? handleButtonClick(selectedPokemon.national_id + 1) : alert('No Pokemon to the right!')}
                 >
                   &#10148;
                 </button>
