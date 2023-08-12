@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql2');
+require('dotenv').config();
 
 const port = 3001; // Replace this with your desired port number
 
@@ -15,24 +16,27 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Database connection
-const db = mysql.createPool({
-    //Remote DB
-    host: 'us-cdbr-east-06.cleardb.net',
-    user: 'bbc1d236a2fdf8',
-    password: 'c0f12074',
-    database: 'heroku_7dd2ee314208c5d',
-
-    //Local DB
-    // host: 'localhost',  // Change to localhost
-    // port: 3306,         // Specify the port
-    // user: 'root',       // Use the root user
-    // password: 'PW',  // Use the specified password
-    // database: 'pokesand', // Replace if needed
-
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-});
+const db = (process.env.DB_HOST != 'localhost')
+    ? mysql.createPool({
+        //Remote DB
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_BASE,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+    }) : mysql.createPool({
+        //Local DB
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_BASE,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+    });
 
 /**
  * Endpoint test for basic text results of stored pokemon data.
