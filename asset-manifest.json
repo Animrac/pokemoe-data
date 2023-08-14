@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/pokemoe-data/static/css/main.770fbbf6.css",
-    "main.js": "/pokemoe-data/static/js/main.9ebc8037.js",
+    "main.css": "/pokemoe-data/static/css/main.7a7e994a.css",
+    "main.js": "/pokemoe-data/static/js/main.a3d4f319.js",
     "static/media/poke.mp3": "/pokemoe-data/static/media/poke.3c9ca09c5e0a78261e52.mp3",
     "static/media/stripesbg.jpg": "/pokemoe-data/static/media/stripesbg.d11b0d1a835f096b1724.jpg",
     "static/media/moe.png": "/pokemoe-data/static/media/moe.b79fe6c2b0081c434ac6.png",
@@ -42,11 +42,11 @@
     "static/media/flying_accent.png": "/pokemoe-data/static/media/flying_accent.fb9dac4693ee424e4863.png",
     "static/media/selectbetter.mp3": "/pokemoe-data/static/media/selectbetter.1a4f570b24e169526a37.mp3",
     "index.html": "/pokemoe-data/index.html",
-    "main.770fbbf6.css.map": "/pokemoe-data/static/css/main.770fbbf6.css.map",
-    "main.9ebc8037.js.map": "/pokemoe-data/static/js/main.9ebc8037.js.map"
+    "main.7a7e994a.css.map": "/pokemoe-data/static/css/main.7a7e994a.css.map",
+    "main.a3d4f319.js.map": "/pokemoe-data/static/js/main.a3d4f319.js.map"
   },
   "entrypoints": [
-    "static/css/main.770fbbf6.css",
-    "static/js/main.9ebc8037.js"
+    "static/css/main.7a7e994a.css",
+    "static/js/main.a3d4f319.js"
   ]
 }
