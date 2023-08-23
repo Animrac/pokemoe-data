@@ -3,7 +3,7 @@
 # PokéMoe Data
 A Pokedex which allows users to create a party of pokemon and track what they have caught. It is coded in JavaScript, using React and Node, with a MySQL database.
 
-The app is currently running and functional on the provided github.io page, linked in the information panel of this repository.
+The app is no longer hosted online, as this project had a intended short lifespan and server costs would not make sense to keep it running. Instructions for usage online and offline are kept below, for any user who desires to run the project in either configuration using their own resources. DDL/DML statements are provided in the repository to rebuild the database to correct specification.
 
 When downloaded the app is capable of being run with local or remote server and database connectivity. Instructions for running fully remote and locally are provided below. Remote functionality is likely not to function past August 2023 due to server costs.
 
