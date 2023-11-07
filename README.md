@@ -31,6 +31,7 @@ When downloaded the app is capable of being run with local or remote server and 
 
 # Troubleshooting:
 1. If you receive an error about how "options.allowedHosts[0] should be a non-empty string", go to this directory: `\pokemoe-data\client\node_modules\react-scripts\config` and find `webpackDevServer.config`. Change line 46: `allowedHosts: disableFirewall ? 'all' : [allowedHost],` to: `allowedHosts: disableFirewall ? 'all' : "localhost"`.
+2. If you run `npm install` in the `client` directory and receive a giant error message, `npm ERR! code ERESOLVE`, run `npm install --force` or `npm install --legacy-peer-deps`.
 
 
 <img src="https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books/blob/master/NodeJs/Hifumi_Takimoto_NodeJs.png?raw=true" alt="Confusion">
